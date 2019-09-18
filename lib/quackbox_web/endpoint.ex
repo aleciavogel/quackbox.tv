@@ -42,5 +42,7 @@ defmodule QuackboxWeb.Endpoint do
     key: "_quackbox_key",
     signing_salt: "ls9yE2tq"
 
+  plug Pow.Plug.Session, otp_app: :quackbox
+
   plug QuackboxWeb.Router
 end
