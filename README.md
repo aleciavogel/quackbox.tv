@@ -1,20 +1,14 @@
-# Quackbox
+# Quackbox.TV
 
-To start your Phoenix server:
+This repository was created to accompany a tutorial I wrote on my blog, called [Create a Jackbox.TV clone with Phoenix 1.4 & Docker](https://alecia.ca/blog/creating-a-clone-of-a-jackboxtv-game-with-phoenix-amp-elixir-part-1).
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
+## Installation
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Clone the repository with:
+```
+git clone git@github.com:aleciavogel/quackbox.tv.git
+```
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+Copy `.env.dist` into a new file called `.env` in the root project directory. Change values as needed. If you change the names of the databases, you'll need to also update `/docker/postgres/scripts/databases.sql` before you build the "phoenix" service with Docker.
 
-## Learn more
-
-  * Official website: http://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+Next, run `docker-compose build` and `docker-compose up` to get everything up and running. The databases will automatically be created and migrated. Once the phoenix container finishes building, you will be able to view the site at `http://localhost:4000`.
