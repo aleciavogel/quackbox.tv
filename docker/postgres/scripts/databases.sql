@@ -1,0 +1,2 @@
+CREATE DATABASE qb_dev;
+CREATE DATABASE qb_test;
