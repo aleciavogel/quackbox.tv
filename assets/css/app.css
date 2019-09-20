@@ -1,2 +1,12 @@
-/* This file is for your main application css. */
+#brand {
+    margin-left: auto;
+    margin-right: auto;
+}
 
+#brand > span {
+    margin-left: -50px;
+}
+
+main {
+    margin-top: 5em;
+}

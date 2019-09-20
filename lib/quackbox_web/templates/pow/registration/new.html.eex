@@ -1,0 +1,43 @@
+<section class="container">
+  <div class="row justify-content-center">
+    <div class="col-10 col-md-7 col-lg-5">
+      <h2 class="text-center">Register</h2>
+
+      <%= form_for @changeset, @action, [as: :user, class: 'form'], fn f -> %>
+        <%= if @changeset.action do %>
+          <div class="alert alert-danger">
+            <p>Oops, something went wrong! Please check the errors below.</p>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= label f, Pow.Ecto.Schema.user_id_field(@changeset) %>
+          <%= text_input f, Pow.Ecto.Schema.user_id_field(@changeset), class: 'form-control' %>
+          <%= error_tag f, Pow.Ecto.Schema.user_id_field(@changeset) %>
+        </div>
+
+        <div class="form-group">
+          <%= label f, :password %>
+          <%= password_input f, :password, class: 'form-control' %>
+          <%= error_tag f, :password %>
+        </div>
+
+        <div class="form-group">
+          <%= label f, :confirm_password %>
+          <%= password_input f, :confirm_password, class: 'form-control' %>
+          <%= error_tag f, :confirm_password %>
+        </div>
+
+        <div>
+          <%= submit "Register", class: 'btn btn-secondary btn-block' %>
+        </div>
+      <% end %>
+
+      <br/>
+
+      <p class="text-center">
+        <%= link "Sign in instead", to: Routes.pow_session_path(@conn, :new) %>
+      </p>
+    </div>
+  </div>
+</section>
