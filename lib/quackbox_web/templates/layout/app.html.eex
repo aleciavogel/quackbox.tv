@@ -33,12 +33,16 @@
       </div>
     </nav>
     <main role="main">
-      <%= if get_flash(@conn, :info) do %>
-        <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <% end %>
-      <% if get_flash(@conn, :error) do %>
-        <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
-      <% end %>
+      <div class="container">
+        <div class="row justify-content-center">
+          <%= Enum.map(get_flash(@conn), fn {flash_key, flash_message} -> %>
+            <% alert_class = if (flash_key == "error"), do: 'danger', else: flash_key %>
+            <%= if (flash_message) do %>
+              <div class="alert alert-<%= alert_class %>"><%= flash_message %></div>
+            <% end %>
+          <% end) %>
+        </div>
+      </div>
       <%= render @view_module, @view_template, assigns %>
     </main>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
