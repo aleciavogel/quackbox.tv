@@ -125,7 +125,12 @@ defmodule Quackbox.Games do
       %Room{}
 
   """
-  def get_room!(id), do: raise "TODO"
+  def get_room!(player_code) do
+    query = from r in Room,
+          where: r.player_code == ^player_code
+          
+    Repo.one(query)
+  end
 
   @doc """
   Creates a room.

@@ -4,7 +4,9 @@ defmodule Quackbox.Repo.Migrations.CreateRooms do
   def change do
     create table(:rooms) do
       add :player_code, :string
+      add :max_players, :integer
       add :open, :boolean, default: true
+
       add :game_id, references(:games, on_delete: :nothing)
       add :user_id, references(:users, on_delete: :nothing)
 

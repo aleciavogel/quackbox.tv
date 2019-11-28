@@ -2,10 +2,11 @@ defmodule QuackboxWeb.RoomController do
   use QuackboxWeb, :controller
   alias Quackbox.Games
 
-  def create(conn, %{"room" => %{"game_id" => game_id}}) do
+  def create(conn, %{"room" => %{"game_id" => game_id, "max_players" => max_players}}) do
     room = Games.create_room(%{
       game_id: game_id,
-      user_id: Pow.Plug.current_user(conn).id
+      user_id: Pow.Plug.current_user(conn).id,
+      max_players: max_players
     })
 
     conn

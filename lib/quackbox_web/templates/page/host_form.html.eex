@@ -4,7 +4,7 @@
     <div class="form-row">
         <div class="form-group col-md-3">
             <label for="player-number"># Players</label>
-            <input type="number" class="form-control" name="player-number" value="6" max="8" min="3" />
+            <%= number_input f, :max_players, value: 6, class: "form-control", max: 8, min: 3 %>
         </div>
         <div class="form-group col-md-9">
             <label for="game-type">Game Type</label>

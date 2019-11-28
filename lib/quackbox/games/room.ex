@@ -8,9 +8,11 @@ defmodule Quackbox.Games.Room do
 
   schema "rooms" do
     field :player_code, :string
+    field :max_players, :integer
+    field :open, :boolean, default: true
+
     field :game_id, :id
     field :user_id, :id
-    field :open, :boolean, default: true
 
     timestamps()
   end
@@ -18,11 +20,12 @@ defmodule Quackbox.Games.Room do
   @doc false
   def changeset(room, attrs) do
     room
-    |> cast(attrs, [:game_id, :user_id])
-    |> validate_required([:game_id, :user_id])
+    |> cast(attrs, [:game_id, :user_id, :max_players])
+    |> validate_required([:game_id, :user_id, :max_players])
     |> generate_player_code()
   end
 
+  @doc false
   defp generate_player_code(%Ecto.Changeset{} = changes) do
     case attempt_player_code() do
       {:halt, [_code, tries]} ->

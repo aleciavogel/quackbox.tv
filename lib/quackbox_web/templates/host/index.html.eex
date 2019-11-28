@@ -1,1 +1,4 @@
 <h1>Host View</h1>
+<p>
+  <strong>Code:</strong> <%= @room.player_code %>
+</p>
