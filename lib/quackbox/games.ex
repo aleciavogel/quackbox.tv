@@ -6,7 +6,7 @@ defmodule Quackbox.Games do
   import Ecto.Query, warn: false
   alias Quackbox.Repo
 
-  alias Quackbox.Games.Game
+  alias Quackbox.Games.{Game, Room}
 
   @doc """
   Returns the list of games.
@@ -136,7 +136,9 @@ defmodule Quackbox.Games do
 
   """
   def create_room(attrs \\ %{}) do
-    raise "TODO"
+    %Room{}
+    |> Room.changeset(attrs)
+    |> Repo.insert()
   end
 
   @doc """
