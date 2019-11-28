@@ -11,6 +11,7 @@ defmodule Quackbox.Repo.Migrations.CreateRooms do
       timestamps()
     end
 
+    create index(:rooms, [:player_code])
     create index(:rooms, [:game_id])
     create index(:rooms, [:user_id])
   end
