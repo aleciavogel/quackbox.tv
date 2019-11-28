@@ -1,6 +1,5 @@
 defmodule QuackboxWeb.HostController do
   use QuackboxWeb, :controller
-  
   alias Quackbox.Games
 
   def index(conn, %{"room_player_code" => player_code}) do

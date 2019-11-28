@@ -14,7 +14,7 @@ defmodule QuackboxWeb.RoomController do
   end
 
   def show(conn, _params) do
-    # TODO
+    # TODO: Conditional statement for audience vs player to assign to a view
     render(conn, "show.html")
   end
 end
