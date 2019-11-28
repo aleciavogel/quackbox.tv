@@ -9,7 +9,7 @@ defmodule Quackbox.Games.Room do
   schema "rooms" do
     field :player_code, :string
     field :max_players, :integer
-    field :open, :boolean, default: true
+    field :finished_at, :date
 
     field :game_id, :id
     field :user_id, :id
@@ -43,7 +43,7 @@ defmodule Quackbox.Games.Room do
       player_code = Nanoid.generate()
       
       query = from r in Room, 
-            where: r.open == false,
+            where: is_nil(r.finished_at),
             where: r.player_code == ^player_code
 
       if Repo.exists?(query) do
