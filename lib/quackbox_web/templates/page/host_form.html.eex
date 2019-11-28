@@ -1,4 +1,4 @@
-<form class="form">
+<%= form_for @conn, Routes.room_path(@conn, :create), [as: :room, class: "form"], fn f -> %>
     <h2 class="text-center">Host Game</h2>
     
     <div class="form-row">
@@ -8,11 +8,8 @@
         </div>
         <div class="form-group col-md-9">
             <label for="game-type">Game Type</label>
-            <select class="form-control" name="game-type">
-                <option selected>Choose a game...</option>
-                <option>Trivial Trivia</option>
-            </select>
+            <%= select f, :game_id, @games, prompt: "Select a game...", class: "form-control" %>
         </div>
     </div>
     <button class="btn btn-lg btn-secondary btn-block" type="submit">Create</button>
-</form>
+<% end %>

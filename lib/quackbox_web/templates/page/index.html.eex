@@ -6,7 +6,7 @@
     <%= if Pow.Plug.current_user(@conn) do %>
       <div class="d-sm-block col-lg-1 mb-5"></div>
       <div class="col-12 col-md-7 col-lg-5">
-        <%= render "host_form.html" %>
+        <%= render "host_form.html", conn: @conn, games: @games %>
       </div>
     <% end %>
   </div>

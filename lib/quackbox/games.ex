@@ -2,6 +2,7 @@ defmodule Quackbox.Games do
   @moduledoc """
   The Games context.
   """
+  require Logger
 
   import Ecto.Query, warn: false
   alias Quackbox.Repo
@@ -18,7 +19,10 @@ defmodule Quackbox.Games do
 
   """
   def list_games do
-    raise "TODO"
+    query = from g in Game,
+          select: {g.name, g.id}
+
+    Repo.all(query)
   end
 
   @doc """
@@ -138,7 +142,7 @@ defmodule Quackbox.Games do
   def create_room(attrs \\ %{}) do
     %Room{}
     |> Room.changeset(attrs)
-    |> Repo.insert()
+    |> Repo.insert!()
   end
 
   @doc """

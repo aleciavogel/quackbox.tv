@@ -26,6 +26,7 @@ defmodule QuackboxWeb.Router do
     resources "/rooms", RoomController, only: [:create, :show] do
       get "/host", HostController, :index
     end
+    
     get "/", PageController, :index
   end
 
