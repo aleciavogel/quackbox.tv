@@ -9,3 +9,11 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias Quackbox.Repo
+alias Quackbox.Games.Game
+
+Repo.insert!(%Game{
+  name: "Trivial Trivia",
+  description: "May the best lies win!"
+})
