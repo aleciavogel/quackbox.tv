@@ -2,8 +2,6 @@ defmodule Quackbox.Games do
   @moduledoc """
   The Games context.
   """
-  require Logger
-
   import Ecto.Query, warn: false
   alias Quackbox.Repo
 
