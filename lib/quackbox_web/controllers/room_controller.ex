@@ -12,9 +12,4 @@ defmodule QuackboxWeb.RoomController do
     conn
     |> redirect(to: Routes.room_host_path(conn, :index, room.player_code))
   end
-
-  def show(conn, _params) do
-    # TODO: Conditional statement for audience vs player to assign to a view
-    render(conn, "show.html")
-  end
 end
