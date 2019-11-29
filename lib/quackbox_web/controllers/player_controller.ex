@@ -1,7 +1,6 @@
 defmodule QuackboxWeb.PlayerController do
   use QuackboxWeb, :controller
   alias Quackbox.Games
-  alias Quackbox.Games.Room
 
   def create(conn, %{"player" => %{"name" => name, "player_code" => player_code}}) do
     attrs = %{name: name, player_code: player_code}
