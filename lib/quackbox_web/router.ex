@@ -25,6 +25,8 @@ defmodule QuackboxWeb.Router do
 
     resources "/rooms", RoomController, only: [:create], param: "player_code" do
       get "/host", HostController, :index
+      post "/join", PlayerController, :create, as: :join
+      get "/play/:token", PlayerController, :show, as: :play
     end
 
     get "/", PageController, :index
