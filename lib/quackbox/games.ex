@@ -5,7 +5,7 @@ defmodule Quackbox.Games do
   import Ecto.Query, warn: false
   alias Quackbox.Repo
 
-  alias Quackbox.Games.{Game, Room}
+  alias Quackbox.Games.{Game, Room, Player}
 
   @doc """
   Returns the list of games.
@@ -130,6 +130,14 @@ defmodule Quackbox.Games do
     Repo.one(query)
   end
 
+  def get_available_room!(player_code) do
+    query = from r in Room,
+          where: r.player_code == ^player_code,
+          where: is_nil(r.finished_at)
+          
+    Repo.all(query)
+  end
+
   @doc """
   Creates a room.
 
@@ -222,7 +230,13 @@ defmodule Quackbox.Games do
       ** (Ecto.NoResultsError)
 
   """
-  def get_player!(id), do: Repo.get!(Player, id)
+  def get_player!(player_token) do
+    query = from p in Player,
+          where: p.token == ^player_token
+
+    Repo.one(query)
+    |> Repo.preload(:room)
+  end
 
   @doc """
   Creates a player.
@@ -237,9 +251,16 @@ defmodule Quackbox.Games do
 
   """
   def create_player(attrs \\ %{}) do
-    %Player{}
-    |> Player.changeset(attrs)
-    |> Repo.insert()
+    case get_available_room!(attrs.player_code) do
+      [room] ->
+        %Player{}
+        |> Player.changeset(%{room_id: room.id, name: attrs.name})
+        |> Repo.insert!()
+      [] ->
+        nil
+      _ ->
+        nil
+    end
   end
 
   @doc """
