@@ -3,8 +3,8 @@ defmodule Quackbox.Games do
   The Games context.
   """
   import Ecto.Query, warn: false
+  
   alias Quackbox.Repo
-
   alias Quackbox.Games.{Game, Room, Player}
 
   @doc """
@@ -232,10 +232,10 @@ defmodule Quackbox.Games do
   """
   def get_player!(player_token) do
     query = from p in Player,
-          where: p.token == ^player_token
+          where: p.token == ^player_token,
+          preload: [:room]
 
     Repo.one(query)
-    |> Repo.preload(:room)
   end
 
   @doc """
