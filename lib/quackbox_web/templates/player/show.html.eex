@@ -1,4 +1,4 @@
-<h1>Player View for <%= @player.name %></h1>
+<h1>Player View</h1>
 <p>
-  <strong>Code:</strong> <%= @room.player_code %>
+  <strong>Name:</strong> <%= @player.name %>
 </p>
