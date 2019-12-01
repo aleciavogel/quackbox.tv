@@ -134,10 +134,10 @@ defmodule Quackbox.Games do
       ** (Ecto.NoResultsError)
 
   """
-  def get_room!(player_code) do
+  def get_room!(access_code) do
     query = from r in Room,
           where: r.access_code == ^access_code,
-          where: nil(r.finished_at)
+          where: is_nil(r.finished_at)
           
     Repo.one(query)
   end

@@ -23,10 +23,10 @@ defmodule QuackboxWeb.Router do
   scope "/", QuackboxWeb do
     pipe_through :browser
 
-    resources "/rooms", RoomController, only: [:create], param: "player_code" do
+    resources "/rooms", RoomController, only: [:create], param: "access_code" do
       get "/host", HostController, :index
     end
-    
+
     get "/", PageController, :index
   end
   # Other scopes may use custom stacks.
