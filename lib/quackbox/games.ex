@@ -18,7 +18,10 @@ defmodule Quackbox.Games do
 
   """
   def list_games do
-    Repo.all(Game)
+    query = from g in Game,
+          select: {g.name, g.id}
+
+    Repo.all(query)
   end
 
   @doc """
@@ -131,7 +134,13 @@ defmodule Quackbox.Games do
       ** (Ecto.NoResultsError)
 
   """
-  def get_room!(id), do: Repo.get!(Room, id)
+  def get_room!(player_code) do
+    query = from r in Room,
+          where: r.access_code == ^access_code,
+          where: nil(r.finished_at)
+          
+    Repo.one(query)
+  end
 
   @doc """
   Creates a room.
