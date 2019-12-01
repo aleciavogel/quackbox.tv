@@ -3,16 +3,17 @@ defmodule QuackboxWeb.PlayerController do
   alias Quackbox.Games
 
   def create(conn, %{"player" => %{"name" => name, "access_code" => access_code}}) do
-    attrs = %{name: name, access_code: access_code}
+    attrs = %{name: name, access_code: String.upcase(access_code)}
 
     case Games.create_player(attrs) do
       {:ok, player} ->
         conn
         |> redirect(to: Routes.room_play_path(conn, :show, access_code, player.token))
+        
       {:error, changeset} ->
         conn
-        |> redirect(to: Routes.page_path(conn, :index)) # TODO: add a specific changeset to render error
-      
+        |> put_view(QuackboxWeb.PageView)
+        |> render("index.html", games: Games.list_games(), player_changeset: changeset)
     end
   end
   
