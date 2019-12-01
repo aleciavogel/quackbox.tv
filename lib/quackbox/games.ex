@@ -5,8 +5,7 @@ defmodule Quackbox.Games do
 
   import Ecto.Query, warn: false
   alias Quackbox.Repo
-
-  alias Quackbox.Games.{Game, Room, Player}
+  alias Quackbox.Games.{Game, Player, Room}
 
   @doc """
   Returns the list of games.
@@ -102,10 +101,12 @@ defmodule Quackbox.Games do
 
   """
   def change_game(%Game{} = game) do
-    Game.changeset(game, %{})
+    Ecto.Changeset.change(game)
   end
 
-  alias Quackbox.Games.Room
+  def new_game() do
+    Ecto.Changeset.change(%Game{})
+  end
 
   @doc """
   Returns the list of rooms.
@@ -157,7 +158,7 @@ defmodule Quackbox.Games do
   def create_room(attrs \\ %{}) do
     %Room{}
     |> Room.changeset(attrs)
-    |> Repo.insert!()
+    |> Repo.insert()
   end
 
   @doc """
@@ -207,7 +208,9 @@ defmodule Quackbox.Games do
     Room.changeset(room, %{})
   end
 
-  alias Quackbox.Games.Player
+  def new_room() do
+    Ecto.Changeset.change(%Room{})
+  end
 
   @doc """
   Returns the list of players.
@@ -260,11 +263,11 @@ defmodule Quackbox.Games do
     case get_room!(attrs.access_code) do
       [room] ->
         %Player{}
-        |> Player.changeset(%{room_id: room.id, name: attrs.name})
+        |> Player.changeset(%{name: attrs.name}, room)
         |> Repo.insert()
       [] ->
         %Player{}
-        |> Player.changeset(%{name: attrs.name})
+        |> Player.changeset(%{name: attrs.name}, nil)
         |> Repo.insert()
       _ ->
         nil
@@ -285,7 +288,7 @@ defmodule Quackbox.Games do
   """
   def update_player(%Player{} = player, attrs) do
     player
-    |> Player.changeset(attrs)
+    |> Player.changeset(attrs, nil)
     |> Repo.update()
   end
 
@@ -315,6 +318,10 @@ defmodule Quackbox.Games do
 
   """
   def change_player(%Player{} = player) do
-    Player.changeset(player, %{})
+    Ecto.Changeset.change(player)
+  end
+
+  def new_player() do
+    Ecto.Changeset.change(%Player{})
   end
 end

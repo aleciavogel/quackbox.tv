@@ -9,11 +9,11 @@ defmodule QuackboxWeb.PlayerController do
       {:ok, player} ->
         conn
         |> redirect(to: Routes.room_play_path(conn, :show, access_code, player.token))
-        
+
       {:error, changeset} ->
         conn
         |> put_view(QuackboxWeb.PageView)
-        |> render("index.html", games: Games.list_games(), player_changeset: changeset)
+        |> render("index.html", games: Games.list_games(), player_changeset: changeset, room_changeset: Games.new_room())
     end
   end
   

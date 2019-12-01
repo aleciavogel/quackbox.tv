@@ -1,12 +1,12 @@
 <section class="container">
   <div class="row justify-content-center">
     <div class="col-12 col-md-7 col-lg-5">
-      <%= render "player_form.html", conn: @conn %>
+      <%= render "player_form.html", conn: @conn, changeset: @player_changeset %>
     </div>
     <%= if Pow.Plug.current_user(@conn) do %>
       <div class="d-sm-block col-lg-1 mb-5"></div>
       <div class="col-12 col-md-7 col-lg-5">
-        <%= render "host_form.html", conn: @conn, games: @games %>
+        <%= render "host_form.html", conn: @conn, games: @games, changeset: @room_changeset %>
       </div>
     <% end %>
   </div>

@@ -1,12 +1,24 @@
-<%= form_for @conn, Routes.join_path(@conn, :create), [as: :player, class: "form"], fn f -> %>
+<%= form_for @changeset, Routes.join_path(@conn, :create), [as: :player, class: "form"], fn f -> %>
     <h2 class="text-center">Join A Game</h2>
+
+    <% invalid_name = if @changeset.errors[:name], do: " is-invalid", else: "" %>
+    <% invalid_code = if @changeset.errors[:access_code], do: " is-invalid", else: "" %>
+
     <div class="form-group">
         <%= label f, :name, "Name" %>
-        <%= text_input f, :name, class: "form-control", placeholder: "Enter your name" %>
+        <%= text_input f, :name, class: "form-control#{invalid_name}", placeholder: "Enter your name" %>
+        <div class="invalid-feedback">
+            <%= error_tag f, :name %>
+        </div>
     </div>
+
     <div class="form-group">
         <%= label f, :access_code, "Room Code" %>
-        <%= text_input f, :access_code, class: "form-control", placeholder: "Enter 4-letter code" %>
+        <%= text_input f, :access_code, class:  "form-control#{invalid_code}", placeholder: "Enter 4-letter code" %>
+        <div class="invalid-feedback">
+            <%= error_tag f, :access_code %>
+        </div>
     </div>
+
     <button class="btn btn-lg btn-secondary btn-block" type="submit">Play</button>
 <% end %>
