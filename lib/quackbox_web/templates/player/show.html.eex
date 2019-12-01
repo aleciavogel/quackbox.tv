@@ -1,0 +1,4 @@
+<h1>Player View</h1>
+<p>
+  <strong>Name:</strong> <%= @player.name %>
+</p>
