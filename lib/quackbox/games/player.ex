@@ -5,7 +5,7 @@ defmodule Quackbox.Games.Player do
   schema "players" do
     field :name, :string
     field :token, :string
-    field :room_id, :id
+    belongs_to :room, Quackbox.Games.Room
 
     timestamps()
   end
@@ -13,8 +13,15 @@ defmodule Quackbox.Games.Player do
   @doc false
   def changeset(player, attrs) do
     player
-    |> cast(attrs, [:name, :token])
-    |> validate_required([:name, :token])
+    |> cast(attrs, [:name, :room_id])
+    |> generate_token()
+    |> validate_required([:name, :token, :room_id])
     |> unique_constraint(:token)
+  end
+
+  defp generate_token(changes \\ %{}) do
+    chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    token = Nanoid.generate_non_secure(21, chars)
+    put_change(changes, :token, token)
   end
 end
