@@ -67,9 +67,9 @@ defmodule Quackbox.GamesTest do
   describe "rooms" do
     alias Quackbox.Games.Room
 
-    @valid_attrs %{finished_at: ~D[2010-04-17], max_players: 42, player_code: "some player_code"}
-    @update_attrs %{finished_at: ~D[2011-05-18], max_players: 43, player_code: "some updated player_code"}
-    @invalid_attrs %{finished_at: nil, max_players: nil, player_code: nil}
+    @valid_attrs %{finished_at: ~D[2010-04-17], max_players: 42, access_code: "some access_code"}
+    @update_attrs %{finished_at: ~D[2011-05-18], max_players: 43, access_code: "some updated access_code"}
+    @invalid_attrs %{finished_at: nil, max_players: nil, access_code: nil}
 
     def room_fixture(attrs \\ %{}) do
       {:ok, room} =
@@ -94,7 +94,7 @@ defmodule Quackbox.GamesTest do
       assert {:ok, %Room{} = room} = Games.create_room(@valid_attrs)
       assert room.finished_at == ~D[2010-04-17]
       assert room.max_players == 42
-      assert room.player_code == "some player_code"
+      assert room.access_code == "some access_code"
     end
 
     test "create_room/1 with invalid data returns error changeset" do
@@ -106,7 +106,7 @@ defmodule Quackbox.GamesTest do
       assert {:ok, %Room{} = room} = Games.update_room(room, @update_attrs)
       assert room.finished_at == ~D[2011-05-18]
       assert room.max_players == 43
-      assert room.player_code == "some updated player_code"
+      assert room.access_code == "some updated access_code"
     end
 
     test "update_room/2 with invalid data returns error changeset" do

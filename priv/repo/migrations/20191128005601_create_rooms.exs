@@ -3,7 +3,7 @@ defmodule Quackbox.Repo.Migrations.CreateRooms do
 
   def change do
     create table(:rooms) do
-      add :player_code, :string
+      add :access_code, :string
       add :max_players, :integer
       add :finished_at, :date
 
@@ -13,7 +13,7 @@ defmodule Quackbox.Repo.Migrations.CreateRooms do
       timestamps()
     end
 
-    create index(:rooms, [:player_code])
+    create index(:rooms, [:access_code])
     create index(:rooms, [:game_id])
     create index(:rooms, [:user_id])
   end

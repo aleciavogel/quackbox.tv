@@ -2,13 +2,13 @@ defmodule QuackboxWeb.PlayerController do
   use QuackboxWeb, :controller
   alias Quackbox.Games
 
-  def create(conn, %{"player" => %{"name" => name, "player_code" => player_code}}) do
-    attrs = %{name: name, player_code: player_code}
+  def create(conn, %{"player" => %{"name" => name, "access_code" => access_code}}) do
+    attrs = %{name: name, access_code: access_code}
 
     case Games.create_player(attrs) do
       player ->
         conn
-        |> redirect(to: Routes.room_play_path(conn, :show, player_code, player.token))
+        |> redirect(to: Routes.room_play_path(conn, :show, access_code, player.token))
       nil ->
         conn
         |> redirect(to: Routes.page_path(conn, :index)) # TODO: add a specific changeset to render error
