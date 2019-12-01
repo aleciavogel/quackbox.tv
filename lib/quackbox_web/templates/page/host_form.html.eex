@@ -3,11 +3,11 @@
     
     <div class="form-row">
         <div class="form-group col-md-3">
-            <label for="player-number"># Players</label>
+            <%= label f, :max_players, "# Players" %>
             <%= number_input f, :max_players, value: 6, class: "form-control", max: 8, min: 3 %>
         </div>
         <div class="form-group col-md-9">
-            <label for="game-type">Game Type</label>
+            <%= label f, :game_id, "Game Type"%>
             <%= select f, :game_id, @games, prompt: "Select a game...", class: "form-control" %>
         </div>
     </div>

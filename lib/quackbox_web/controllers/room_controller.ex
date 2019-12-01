@@ -10,6 +10,6 @@ defmodule QuackboxWeb.RoomController do
     })
 
     conn
-    |> redirect(to: Routes.room_host_path(conn, :index, room.player_code))
+    |> redirect(to: Routes.room_host_path(conn, :index, room.access_code))
   end
 end

@@ -2,10 +2,11 @@ defmodule Quackbox.Games do
   @moduledoc """
   The Games context.
   """
+
   import Ecto.Query, warn: false
-  
   alias Quackbox.Repo
-  alias Quackbox.Games.{Game, Room, Player}
+
+  alias Quackbox.Games.Game
 
   @doc """
   Returns the list of games.
@@ -26,15 +27,18 @@ defmodule Quackbox.Games do
   @doc """
   Gets a single game.
 
-  Raises if the Game does not exist.
+  Raises `Ecto.NoResultsError` if the Game does not exist.
 
   ## Examples
 
       iex> get_game!(123)
       %Game{}
 
+      iex> get_game!(456)
+      ** (Ecto.NoResultsError)
+
   """
-  def get_game!(id), do: raise "TODO"
+  def get_game!(id), do: Repo.get!(Game, id)
 
   @doc """
   Creates a game.
@@ -45,11 +49,13 @@ defmodule Quackbox.Games do
       {:ok, %Game{}}
 
       iex> create_game(%{field: bad_value})
-      {:error, ...}
+      {:error, %Ecto.Changeset{}}
 
   """
   def create_game(attrs \\ %{}) do
-    raise "TODO"
+    %Game{}
+    |> Game.changeset(attrs)
+    |> Repo.insert()
   end
 
   @doc """
@@ -61,11 +67,13 @@ defmodule Quackbox.Games do
       {:ok, %Game{}}
 
       iex> update_game(game, %{field: bad_value})
-      {:error, ...}
+      {:error, %Ecto.Changeset{}}
 
   """
   def update_game(%Game{} = game, attrs) do
-    raise "TODO"
+    game
+    |> Game.changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """
@@ -77,24 +85,24 @@ defmodule Quackbox.Games do
       {:ok, %Game{}}
 
       iex> delete_game(game)
-      {:error, ...}
+      {:error, %Ecto.Changeset{}}
 
   """
   def delete_game(%Game{} = game) do
-    raise "TODO"
+    Repo.delete(game)
   end
 
   @doc """
-  Returns a data structure for tracking game changes.
+  Returns an `%Ecto.Changeset{}` for tracking game changes.
 
   ## Examples
 
       iex> change_game(game)
-      %Todo{...}
+      %Ecto.Changeset{source: %Game{}}
 
   """
   def change_game(%Game{} = game) do
-    raise "TODO"
+    Game.changeset(game, %{})
   end
 
   alias Quackbox.Games.Room
@@ -109,33 +117,29 @@ defmodule Quackbox.Games do
 
   """
   def list_rooms do
-    raise "TODO"
+    Repo.all(Room)
   end
 
   @doc """
   Gets a single room.
 
-  Raises if the Room does not exist.
+  Raises `Ecto.NoResultsError` if the Room does not exist.
 
   ## Examples
 
       iex> get_room!(123)
       %Room{}
 
-  """
-  def get_room!(player_code) do
-    query = from r in Room,
-          where: r.player_code == ^player_code
-          
-    Repo.one(query)
-  end
+      iex> get_room!(456)
+      ** (Ecto.NoResultsError)
 
-  def get_available_room!(player_code) do
+  """
+  def get_room!(access_code) do
     query = from r in Room,
-          where: r.player_code == ^player_code,
+          where: r.access_code == ^access_code,
           where: is_nil(r.finished_at)
           
-    Repo.all(query)
+    Repo.one(query)
   end
 
   @doc """
@@ -147,7 +151,7 @@ defmodule Quackbox.Games do
       {:ok, %Room{}}
 
       iex> create_room(%{field: bad_value})
-      {:error, ...}
+      {:error, %Ecto.Changeset{}}
 
   """
   def create_room(attrs \\ %{}) do
@@ -165,11 +169,13 @@ defmodule Quackbox.Games do
       {:ok, %Room{}}
 
       iex> update_room(room, %{field: bad_value})
-      {:error, ...}
+      {:error, %Ecto.Changeset{}}
 
   """
   def update_room(%Room{} = room, attrs) do
-    raise "TODO"
+    room
+    |> Room.changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """
@@ -181,132 +187,23 @@ defmodule Quackbox.Games do
       {:ok, %Room{}}
 
       iex> delete_room(room)
-      {:error, ...}
+      {:error, %Ecto.Changeset{}}
 
   """
   def delete_room(%Room{} = room) do
-    raise "TODO"
+    Repo.delete(room)
   end
 
   @doc """
-  Returns a data structure for tracking room changes.
+  Returns an `%Ecto.Changeset{}` for tracking room changes.
 
   ## Examples
 
       iex> change_room(room)
-      %Todo{...}
+      %Ecto.Changeset{source: %Room{}}
 
   """
   def change_room(%Room{} = room) do
-    raise "TODO"
-  end
-
-  alias Quackbox.Games.Player
-
-  @doc """
-  Returns the list of players.
-
-  ## Examples
-
-      iex> list_players()
-      [%Player{}, ...]
-
-  """
-  def list_players do
-    Repo.all(Player)
-  end
-
-  @doc """
-  Gets a single player.
-
-  Raises `Ecto.NoResultsError` if the Player does not exist.
-
-  ## Examples
-
-      iex> get_player!(123)
-      %Player{}
-
-      iex> get_player!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_player!(player_token) do
-    query = from p in Player,
-          where: p.token == ^player_token,
-          preload: [:room]
-
-    Repo.one(query)
-  end
-
-  @doc """
-  Creates a player.
-
-  ## Examples
-
-      iex> create_player(%{field: value})
-      {:ok, %Player{}}
-
-      iex> create_player(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_player(attrs \\ %{}) do
-    case get_available_room!(attrs.player_code) do
-      [room] ->
-        %Player{}
-        |> Player.changeset(%{room_id: room.id, name: attrs.name})
-        |> Repo.insert!()
-      [] ->
-        nil
-      _ ->
-        nil
-    end
-  end
-
-  @doc """
-  Updates a player.
-
-  ## Examples
-
-      iex> update_player(player, %{field: new_value})
-      {:ok, %Player{}}
-
-      iex> update_player(player, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_player(%Player{} = player, attrs) do
-    player
-    |> Player.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a Player.
-
-  ## Examples
-
-      iex> delete_player(player)
-      {:ok, %Player{}}
-
-      iex> delete_player(player)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_player(%Player{} = player) do
-    Repo.delete(player)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking player changes.
-
-  ## Examples
-
-      iex> change_player(player)
-      %Ecto.Changeset{source: %Player{}}
-
-  """
-  def change_player(%Player{} = player) do
-    Player.changeset(player, %{})
+    Room.changeset(room, %{})
   end
 end

@@ -67,9 +67,9 @@ defmodule Quackbox.GamesTest do
   describe "rooms" do
     alias Quackbox.Games.Room
 
-    @valid_attrs %{player_code: "some player_code"}
-    @update_attrs %{player_code: "some updated player_code"}
-    @invalid_attrs %{player_code: nil}
+    @valid_attrs %{finished_at: ~D[2010-04-17], max_players: 42, player_code: "some player_code"}
+    @update_attrs %{finished_at: ~D[2011-05-18], max_players: 43, player_code: "some updated player_code"}
+    @invalid_attrs %{finished_at: nil, max_players: nil, player_code: nil}
 
     def room_fixture(attrs \\ %{}) do
       {:ok, room} =
@@ -92,6 +92,8 @@ defmodule Quackbox.GamesTest do
 
     test "create_room/1 with valid data creates a room" do
       assert {:ok, %Room{} = room} = Games.create_room(@valid_attrs)
+      assert room.finished_at == ~D[2010-04-17]
+      assert room.max_players == 42
       assert room.player_code == "some player_code"
     end
 
@@ -102,6 +104,8 @@ defmodule Quackbox.GamesTest do
     test "update_room/2 with valid data updates the room" do
       room = room_fixture()
       assert {:ok, %Room{} = room} = Games.update_room(room, @update_attrs)
+      assert room.finished_at == ~D[2011-05-18]
+      assert room.max_players == 43
       assert room.player_code == "some updated player_code"
     end
 
@@ -120,67 +124,6 @@ defmodule Quackbox.GamesTest do
     test "change_room/1 returns a room changeset" do
       room = room_fixture()
       assert %Ecto.Changeset{} = Games.change_room(room)
-    end
-  end
-
-  describe "players" do
-    alias Quackbox.Games.Player
-
-    @valid_attrs %{name: "some name", token: "some token"}
-    @update_attrs %{name: "some updated name", token: "some updated token"}
-    @invalid_attrs %{name: nil, token: nil}
-
-    def player_fixture(attrs \\ %{}) do
-      {:ok, player} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Games.create_player()
-
-      player
-    end
-
-    test "list_players/0 returns all players" do
-      player = player_fixture()
-      assert Games.list_players() == [player]
-    end
-
-    test "get_player!/1 returns the player with given id" do
-      player = player_fixture()
-      assert Games.get_player!(player.id) == player
-    end
-
-    test "create_player/1 with valid data creates a player" do
-      assert {:ok, %Player{} = player} = Games.create_player(@valid_attrs)
-      assert player.name == "some name"
-      assert player.token == "some token"
-    end
-
-    test "create_player/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Games.create_player(@invalid_attrs)
-    end
-
-    test "update_player/2 with valid data updates the player" do
-      player = player_fixture()
-      assert {:ok, %Player{} = player} = Games.update_player(player, @update_attrs)
-      assert player.name == "some updated name"
-      assert player.token == "some updated token"
-    end
-
-    test "update_player/2 with invalid data returns error changeset" do
-      player = player_fixture()
-      assert {:error, %Ecto.Changeset{}} = Games.update_player(player, @invalid_attrs)
-      assert player == Games.get_player!(player.id)
-    end
-
-    test "delete_player/1 deletes the player" do
-      player = player_fixture()
-      assert {:ok, %Player{}} = Games.delete_player(player)
-      assert_raise Ecto.NoResultsError, fn -> Games.get_player!(player.id) end
-    end
-
-    test "change_player/1 returns a player changeset" do
-      player = player_fixture()
-      assert %Ecto.Changeset{} = Games.change_player(player)
     end
   end
 end

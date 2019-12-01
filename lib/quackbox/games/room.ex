@@ -7,7 +7,7 @@ defmodule Quackbox.Games.Room do
   alias Quackbox.Games.{Room}
 
   schema "rooms" do
-    field :player_code, :string
+    field :access_code, :string
     field :max_players, :integer
     field :finished_at, :date
 
@@ -22,34 +22,34 @@ defmodule Quackbox.Games.Room do
     room
     |> cast(attrs, [:game_id, :user_id, :max_players])
     |> validate_required([:game_id, :user_id, :max_players])
-    |> generate_player_code()
+    |> generate_access_code()
   end
 
   @doc false
-  defp generate_player_code(%Ecto.Changeset{} = changes) do
-    case attempt_player_code() do
+  defp generate_access_code(%Ecto.Changeset{} = changes) do
+    case attempt_access_code() do
       {:halt, [_code, tries]} ->
-        add_error(changes, :player_code, "After #{tries} attempts, player_code could not be generated.")
+        add_error(changes, :access_code, "After #{tries} attempts, access_code could not be generated.")
       {:cont, tries} ->
-        add_error(changes, :player_code, "After #{tries} attempts, player_code could not be generated.")
+        add_error(changes, :access_code, "After #{tries} attempts, access_code could not be generated.")
       [code, _tries] ->
-        put_change(changes, :player_code, code)
+        put_change(changes, :access_code, code)
       end
   end
 
   @doc false
-  defp attempt_player_code() do
+  defp attempt_access_code() do
     Enum.reduce_while(1..5, 0, fn x, acc ->
-      player_code = Nanoid.generate()
+      access_code = Nanoid.generate()
       
       query = from r in Room, 
             where: is_nil(r.finished_at),
-            where: r.player_code == ^player_code
+            where: r.access_code == ^access_code
 
       if Repo.exists?(query) do
         {:cont, acc + x}
       else
-        {:halt, [player_code, acc]}
+        {:halt, [access_code, acc]}
       end
     end)
   end
