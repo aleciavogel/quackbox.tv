@@ -10,11 +10,11 @@ defmodule QuackboxWeb.HostController do
       [] ->
         conn
         |> put_flash(:error, "Something went wrong and room could not be found.")
-        |> redirect(to: Routes.page_path)
+        |> redirect(to: Routes.page_path(conn, :index))
       _ ->
         conn
         |> put_flash(:error, "Something went wrong and room could not be found.")
-        |> redirect(to: Routes.page_path)
+        |> redirect(to: Routes.page_path(conn, :index))
     end
   end
 end
