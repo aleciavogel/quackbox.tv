@@ -5,16 +5,32 @@ defmodule Quackbox.Games.AudienceMember do
   schema "audience_members" do
     field :name, :string
     field :token, :string
-    field :room_id, :id
+    
+    belongs_to :room, Quackbox.Games.Room
 
     timestamps()
   end
 
   @doc false
-  def changeset(audience_member, attrs) do
+  def changeset(audience_member, attrs, room) do
     audience_member
-    |> cast(attrs, [:name, :token])
+    |> cast(attrs, [:name])
+    |> generate_token()
     |> validate_required([:name, :token])
     |> unique_constraint(:token)
+    |> put_assoc?(:room, room)
+  end
+
+  defp generate_token(changes \\ %{}) do
+    chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    token = Nanoid.generate_non_secure(21, chars)
+    put_change(changes, :token, token)
+  end
+
+  defp put_assoc?(changes, _atom, nil) do
+    add_error(changes, :access_code, "does not exist.")
+  end
+  defp put_assoc?(changes, atom, records) do
+    put_assoc(changes, atom, records)
   end
 end
