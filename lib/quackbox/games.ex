@@ -205,7 +205,7 @@ defmodule Quackbox.Games do
 
   """
   def change_room(%Room{} = room) do
-    Room.changeset(room, %{})
+    Ecto.Changeset.change(%Room{})
   end
 
   def new_room() do

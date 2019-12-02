@@ -10,11 +10,11 @@ defmodule QuackboxWeb.RoomController do
     }
 
     case Games.create_room(attrs) do
-      {:ok, room} ->
+      {:ok, %Room{} = room} ->
         conn
         |> redirect(to: Routes.room_host_path(conn, :index, room.access_code))
       
-      {:error, changeset} ->
+      {:error, %Ecto.Changeset{} = changeset} ->
         conn
         |> put_view(QuackboxWeb.PageView)
         |> render("index.html", games: Games.list_games(), player_changeset: Games.new_player(), room_changeset: changeset)
