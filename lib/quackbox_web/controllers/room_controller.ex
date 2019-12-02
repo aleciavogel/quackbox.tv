@@ -1,6 +1,7 @@
 defmodule QuackboxWeb.RoomController do
   use QuackboxWeb, :controller
   alias Quackbox.Games
+  alias Quackbox.Games.Room
 
   def create(conn, %{"room" => %{"game_id" => game_id, "max_players" => max_players}}) do
     attrs = %{
@@ -19,9 +20,5 @@ defmodule QuackboxWeb.RoomController do
         |> put_view(QuackboxWeb.PageView)
         |> render("index.html", games: Games.list_games(), player_changeset: Games.new_player(), room_changeset: changeset)
     end
-
-    
-
-    
   end
 end
