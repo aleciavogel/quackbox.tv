@@ -21,7 +21,7 @@ defmodule Quackbox.Games.AudienceMember do
     |> put_assoc?(:room, room)
   end
 
-  defp generate_token(changes \\ %{}) do
+  defp generate_token(changes) do
     chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     token = Nanoid.generate_non_secure(21, chars)
     put_change(changes, :token, token)
