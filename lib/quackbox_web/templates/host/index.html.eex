@@ -1,4 +1,1 @@
-<h1>Host View</h1>
-<p>
-  <strong>Code:</strong> <%= @room.access_code %>
-</p>
+<div id="app"></div>
