@@ -1,0 +1,4 @@
+<h1>Audience Member View</h1>
+<p>
+  <strong>Name:</strong> <%= @audience_member.name %>
+</p>
