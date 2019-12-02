@@ -138,7 +138,9 @@ defmodule Quackbox.Games do
   def get_room!(access_code) do
     query = from r in Room,
           where: r.access_code == ^access_code,
-          where: is_nil(r.finished_at)
+          where: is_nil(r.finished_at),
+          preload: [:players],
+          preload: [:audience_members]
           
     Repo.all(query)
   end
@@ -259,12 +261,20 @@ defmodule Quackbox.Games do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_player(attrs \\ %{}) do
+  def create_player(attrs \\ %{}, room) do
+    %Player{}
+    |> Player.changeset(attrs, room)
+    |> Repo.insert()
+  end
+
+  def create_player_or_audience_memer(attrs \\ %{}) do
     case get_room!(attrs.access_code) do
       [room] ->
-        %Player{}
-        |> Player.changeset(%{name: attrs.name}, room)
-        |> Repo.insert()
+        if length(room.players) < room.max_players do
+          create_player(attrs, room)
+        else
+          create_audience_member(attrs, room)
+        end
       [] ->
         %Player{}
         |> Player.changeset(%{name: attrs.name}, nil)
@@ -354,7 +364,13 @@ defmodule Quackbox.Games do
       ** (Ecto.NoResultsError)
 
   """
-  def get_audience_member!(id), do: Repo.get!(AudienceMember, id)
+  def get_audience_member!(audience_member_token) do
+    query = from a in AudienceMember,
+          where: a.token == ^audience_member_token,
+          preload: [:room]
+    
+    Repo.one(query)
+  end
 
   @doc """
   Creates a audience_member.
@@ -368,9 +384,9 @@ defmodule Quackbox.Games do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_audience_member(attrs \\ %{}) do
+  def create_audience_member(attrs \\ %{}, room) do
     %AudienceMember{}
-    |> AudienceMember.changeset(attrs)
+    |> AudienceMember.changeset(attrs, room)
     |> Repo.insert()
   end
 
@@ -388,7 +404,7 @@ defmodule Quackbox.Games do
   """
   def update_audience_member(%AudienceMember{} = audience_member, attrs) do
     audience_member
-    |> AudienceMember.changeset(attrs)
+    |> AudienceMember.changeset(attrs, nil)
     |> Repo.update()
   end
 
@@ -418,6 +434,6 @@ defmodule Quackbox.Games do
 
   """
   def change_audience_member(%AudienceMember{} = audience_member) do
-    AudienceMember.changeset(audience_member, %{})
+    AudienceMember.changeset(audience_member, %{}, nil)
   end
 end
