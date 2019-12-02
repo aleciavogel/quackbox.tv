@@ -1,7 +1,7 @@
 defmodule QuackboxWeb.PlayerController do
   use QuackboxWeb, :controller
   alias Quackbox.Games
-  alias Quackbox.Room
+  alias Quackbox.Games.Player
 
   def create(conn, %{"player" => %{"name" => name, "access_code" => access_code}}) do
     attrs = %{name: name, access_code: String.upcase(access_code)}
@@ -15,6 +15,11 @@ defmodule QuackboxWeb.PlayerController do
         conn
         |> put_view(QuackboxWeb.PageView)
         |> render("index.html", games: Games.list_games(), player_changeset: changeset, room_changeset: Games.new_room())
+      
+      nil ->
+        conn
+        |> put_flash(:error, "Something has gone wrong and player could not be created.")
+        |> redirect(to: Routes.page_path(conn, :index))
     end
   end
   
