@@ -4,7 +4,7 @@ defmodule Quackbox.Games.Room do
   import Ecto.Changeset
 
   alias Quackbox.Repo
-  alias Quackbox.Games.{Game, Player, AudienceMember}
+  alias Quackbox.Games.{Game, Player, AudienceMember, Room}
   alias Quackbox.Users.User
 
   schema "rooms" do

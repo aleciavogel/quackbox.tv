@@ -267,7 +267,7 @@ defmodule Quackbox.Games do
     |> Repo.insert()
   end
 
-  def create_player_or_audience_memer(attrs \\ %{}) do
+  def create_player_or_audience_member(attrs \\ %{}) do
     case get_room!(attrs.access_code) do
       [room] ->
         if length(room.players) < room.max_players do
