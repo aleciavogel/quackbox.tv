@@ -4,6 +4,9 @@ defmodule QuackboxWeb.AudienceMemberController do
 
   def show(conn, %{"token" => token}) do
     audience = Games.get_audience_member!(token)
-    render(conn, "show.html", audience_member: audience)
+
+    conn
+    |> put_layout({LayoutView, "audience.html"})
+    |> render("show.html", audience_member: audience)
   end
 end

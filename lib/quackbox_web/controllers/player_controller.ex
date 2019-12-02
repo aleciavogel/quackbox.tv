@@ -29,6 +29,9 @@ defmodule QuackboxWeb.PlayerController do
   
   def show(conn, %{"token" => player_token}) do
     player = Games.get_player!(player_token)
-    render(conn, "show.html", player: player)
+
+    conn
+    |> put_layout({LayoutView, "player.html"})
+    |> render("show.html", player: player)
   end
 end
