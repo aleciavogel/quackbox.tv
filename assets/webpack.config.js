@@ -17,6 +17,7 @@ module.exports = (env, options) => ({
     ]
   },
   entry: {
+    app: './js/host.jsx',
     host: './js/host.jsx',
     player: './js/player.jsx',
     audience: './js/audience.jsx'
