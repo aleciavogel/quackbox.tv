@@ -31,7 +31,7 @@ defmodule QuackboxWeb.PlayerController do
     player = Games.get_player!(player_token)
 
     conn
-    |> put_layout({LayoutView, "player.html"})
+    |> put_layout({QuackboxWeb.LayoutView, "player.html"})
     |> render("show.html", player: player)
   end
 end
