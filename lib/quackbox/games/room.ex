@@ -4,15 +4,18 @@ defmodule Quackbox.Games.Room do
   import Ecto.Changeset
 
   alias Quackbox.Repo
-  alias Quackbox.Games.{Room}
+  alias Quackbox.Games.{Game, Player, AudienceMember}
+  alias Quackbox.Users.User
 
   schema "rooms" do
     field :access_code, :string
     field :max_players, :integer
     field :finished_at, :date
 
-    field :game_id, :id
-    field :user_id, :id
+    belongs_to :game, Game
+    belongs_to :user, User
+    has_many :players, Player
+    has_many :audience_members, AudienceMember
 
     timestamps()
   end

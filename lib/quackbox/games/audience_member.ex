@@ -1,18 +1,19 @@
-defmodule Quackbox.Games.Player do
+defmodule Quackbox.Games.AudienceMember do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "players" do
+  schema "audience_members" do
     field :name, :string
     field :token, :string
+    
     belongs_to :room, Quackbox.Games.Room
 
     timestamps()
   end
 
   @doc false
-  def changeset(player, attrs, room) do
-    player
+  def changeset(audience_member, attrs, room) do
+    audience_member
     |> cast(attrs, [:name])
     |> generate_token()
     |> validate_required([:name, :token])

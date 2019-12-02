@@ -126,4 +126,126 @@ defmodule Quackbox.GamesTest do
       assert %Ecto.Changeset{} = Games.change_room(room)
     end
   end
+
+  describe "players" do
+    alias Quackbox.Games.Player
+
+    @valid_attrs %{name: "some name", token: "some token"}
+    @update_attrs %{name: "some updated name", token: "some updated token"}
+    @invalid_attrs %{name: nil, token: nil}
+
+    def player_fixture(attrs \\ %{}) do
+      {:ok, player} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Games.create_player()
+
+      player
+    end
+
+    test "list_players/0 returns all players" do
+      player = player_fixture()
+      assert Games.list_players() == [player]
+    end
+
+    test "get_player!/1 returns the player with given id" do
+      player = player_fixture()
+      assert Games.get_player!(player.id) == player
+    end
+
+    test "create_player/1 with valid data creates a player" do
+      assert {:ok, %Player{} = player} = Games.create_player(@valid_attrs)
+      assert player.name == "some name"
+      assert player.token == "some token"
+    end
+
+    test "create_player/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Games.create_player(@invalid_attrs)
+    end
+
+    test "update_player/2 with valid data updates the player" do
+      player = player_fixture()
+      assert {:ok, %Player{} = player} = Games.update_player(player, @update_attrs)
+      assert player.name == "some updated name"
+      assert player.token == "some updated token"
+    end
+
+    test "update_player/2 with invalid data returns error changeset" do
+      player = player_fixture()
+      assert {:error, %Ecto.Changeset{}} = Games.update_player(player, @invalid_attrs)
+      assert player == Games.get_player!(player.id)
+    end
+
+    test "delete_player/1 deletes the player" do
+      player = player_fixture()
+      assert {:ok, %Player{}} = Games.delete_player(player)
+      assert_raise Ecto.NoResultsError, fn -> Games.get_player!(player.id) end
+    end
+
+    test "change_player/1 returns a player changeset" do
+      player = player_fixture()
+      assert %Ecto.Changeset{} = Games.change_player(player)
+    end
+  end
+
+  describe "audience_members" do
+    alias Quackbox.Games.AudienceMember
+
+    @valid_attrs %{name: "some name", token: "some token"}
+    @update_attrs %{name: "some updated name", token: "some updated token"}
+    @invalid_attrs %{name: nil, token: nil}
+
+    def audience_member_fixture(attrs \\ %{}) do
+      {:ok, audience_member} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Games.create_audience_member()
+
+      audience_member
+    end
+
+    test "list_audience_members/0 returns all audience_members" do
+      audience_member = audience_member_fixture()
+      assert Games.list_audience_members() == [audience_member]
+    end
+
+    test "get_audience_member!/1 returns the audience_member with given id" do
+      audience_member = audience_member_fixture()
+      assert Games.get_audience_member!(audience_member.id) == audience_member
+    end
+
+    test "create_audience_member/1 with valid data creates a audience_member" do
+      assert {:ok, %AudienceMember{} = audience_member} = Games.create_audience_member(@valid_attrs)
+      assert audience_member.name == "some name"
+      assert audience_member.token == "some token"
+    end
+
+    test "create_audience_member/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Games.create_audience_member(@invalid_attrs)
+    end
+
+    test "update_audience_member/2 with valid data updates the audience_member" do
+      audience_member = audience_member_fixture()
+      assert {:ok, %AudienceMember{} = audience_member} = Games.update_audience_member(audience_member, @update_attrs)
+      assert audience_member.name == "some updated name"
+      assert audience_member.token == "some updated token"
+    end
+
+    test "update_audience_member/2 with invalid data returns error changeset" do
+      audience_member = audience_member_fixture()
+      assert {:error, %Ecto.Changeset{}} = Games.update_audience_member(audience_member, @invalid_attrs)
+      assert audience_member == Games.get_audience_member!(audience_member.id)
+    end
+
+    test "delete_audience_member/1 deletes the audience_member" do
+      audience_member = audience_member_fixture()
+      assert {:ok, %AudienceMember{}} = Games.delete_audience_member(audience_member)
+      assert_raise Ecto.NoResultsError, fn -> Games.get_audience_member!(audience_member.id) end
+    end
+
+    test "change_audience_member/1 returns a audience_member changeset" do
+      audience_member = audience_member_fixture()
+      assert %Ecto.Changeset{} = Games.change_audience_member(audience_member)
+    end
+  end
 end

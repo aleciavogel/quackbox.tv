@@ -5,8 +5,7 @@ defmodule Quackbox.Games do
 
   import Ecto.Query, warn: false
   alias Quackbox.Repo
-
-  alias Quackbox.Games.Game
+  alias Quackbox.Games.{Game, Player, Room}
 
   @doc """
   Returns the list of games.
@@ -102,10 +101,12 @@ defmodule Quackbox.Games do
 
   """
   def change_game(%Game{} = game) do
-    Game.changeset(game, %{})
+    Ecto.Changeset.change(game)
   end
 
-  alias Quackbox.Games.Room
+  def new_game() do
+    Ecto.Changeset.change(%Game{})
+  end
 
   @doc """
   Returns the list of rooms.
@@ -137,9 +138,11 @@ defmodule Quackbox.Games do
   def get_room!(access_code) do
     query = from r in Room,
           where: r.access_code == ^access_code,
-          where: is_nil(r.finished_at)
+          where: is_nil(r.finished_at),
+          preload: [:players],
+          preload: [:audience_members]
           
-    Repo.one(query)
+    Repo.all(query)
   end
 
   @doc """
@@ -157,7 +160,7 @@ defmodule Quackbox.Games do
   def create_room(attrs \\ %{}) do
     %Room{}
     |> Room.changeset(attrs)
-    |> Repo.insert!()
+    |> Repo.insert()
   end
 
   @doc """
@@ -204,6 +207,233 @@ defmodule Quackbox.Games do
 
   """
   def change_room(%Room{} = room) do
-    Room.changeset(room, %{})
+    Ecto.Changeset.change(%Room{})
+  end
+
+  def new_room() do
+    Ecto.Changeset.change(%Room{})
+  end
+
+  @doc """
+  Returns the list of players.
+
+  ## Examples
+
+      iex> list_players()
+      [%Player{}, ...]
+
+  """
+  def list_players do
+    Repo.all(Player)
+  end
+
+  @doc """
+  Gets a single player.
+
+  Raises `Ecto.NoResultsError` if the Player does not exist.
+
+  ## Examples
+
+      iex> get_player!(123)
+      %Player{}
+
+      iex> get_player!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_player!(player_token) do
+    query = from p in Player,
+          where: p.token == ^player_token,
+          preload: [:room]
+
+    Repo.one(query)
+  end
+
+  @doc """
+  Creates a player.
+
+  ## Examples
+
+      iex> create_player(%{field: value})
+      {:ok, %Player{}}
+
+      iex> create_player(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_player(attrs \\ %{}, room) do
+    %Player{}
+    |> Player.changeset(attrs, room)
+    |> Repo.insert()
+  end
+
+  def create_player_or_audience_memer(attrs \\ %{}) do
+    case get_room!(attrs.access_code) do
+      [room] ->
+        if length(room.players) < room.max_players do
+          create_player(attrs, room)
+        else
+          create_audience_member(attrs, room)
+        end
+      [] ->
+        %Player{}
+        |> Player.changeset(%{name: attrs.name}, nil)
+        |> Repo.insert()
+      _ ->
+        nil
+    end
+  end
+
+  @doc """
+  Updates a player.
+
+  ## Examples
+
+      iex> update_player(player, %{field: new_value})
+      {:ok, %Player{}}
+
+      iex> update_player(player, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_player(%Player{} = player, attrs) do
+    player
+    |> Player.changeset(attrs, nil)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Player.
+
+  ## Examples
+
+      iex> delete_player(player)
+      {:ok, %Player{}}
+
+      iex> delete_player(player)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_player(%Player{} = player) do
+    Repo.delete(player)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking player changes.
+
+  ## Examples
+
+      iex> change_player(player)
+      %Ecto.Changeset{source: %Player{}}
+
+  """
+  def change_player(%Player{} = player) do
+    Ecto.Changeset.change(player)
+  end
+
+  def new_player() do
+    Ecto.Changeset.change(%Player{})
+  end
+
+  alias Quackbox.Games.AudienceMember
+
+  @doc """
+  Returns the list of audience_members.
+
+  ## Examples
+
+      iex> list_audience_members()
+      [%AudienceMember{}, ...]
+
+  """
+  def list_audience_members do
+    Repo.all(AudienceMember)
+  end
+
+  @doc """
+  Gets a single audience_member.
+
+  Raises `Ecto.NoResultsError` if the Audience member does not exist.
+
+  ## Examples
+
+      iex> get_audience_member!(123)
+      %AudienceMember{}
+
+      iex> get_audience_member!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_audience_member!(audience_member_token) do
+    query = from a in AudienceMember,
+          where: a.token == ^audience_member_token,
+          preload: [:room]
+    
+    Repo.one(query)
+  end
+
+  @doc """
+  Creates a audience_member.
+
+  ## Examples
+
+      iex> create_audience_member(%{field: value})
+      {:ok, %AudienceMember{}}
+
+      iex> create_audience_member(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_audience_member(attrs \\ %{}, room) do
+    %AudienceMember{}
+    |> AudienceMember.changeset(attrs, room)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a audience_member.
+
+  ## Examples
+
+      iex> update_audience_member(audience_member, %{field: new_value})
+      {:ok, %AudienceMember{}}
+
+      iex> update_audience_member(audience_member, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_audience_member(%AudienceMember{} = audience_member, attrs) do
+    audience_member
+    |> AudienceMember.changeset(attrs, nil)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a AudienceMember.
+
+  ## Examples
+
+      iex> delete_audience_member(audience_member)
+      {:ok, %AudienceMember{}}
+
+      iex> delete_audience_member(audience_member)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_audience_member(%AudienceMember{} = audience_member) do
+    Repo.delete(audience_member)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking audience_member changes.
+
+  ## Examples
+
+      iex> change_audience_member(audience_member)
+      %Ecto.Changeset{source: %AudienceMember{}}
+
+  """
+  def change_audience_member(%AudienceMember{} = audience_member) do
+    AudienceMember.changeset(audience_member, %{}, nil)
   end
 end

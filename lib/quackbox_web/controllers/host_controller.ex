@@ -3,8 +3,18 @@ defmodule QuackboxWeb.HostController do
   alias Quackbox.Games
 
   def index(conn, %{"room_access_code" => access_code}) do
-    room = Games.get_room!(access_code)
-    
-    render(conn, "index.html", room: room)
+    case Games.get_room!(access_code) do
+      [room] ->
+        conn
+        |> render("index.html", room: room)
+      [] ->
+        conn
+        |> put_flash(:error, "Something went wrong and room could not be found.")
+        |> redirect(to: Routes.page_path(conn, :index))
+      _ ->
+        conn
+        |> put_flash(:error, "Something went wrong and room could not be found.")
+        |> redirect(to: Routes.page_path(conn, :index))
+    end
   end
 end
