@@ -3,7 +3,7 @@
   "license": "MIT",
   "scripts": {
     "deploy": "webpack --mode production",
-    "watch": "webpack --mode development --watch",
+    "watch": "NODE_OPTIONS=--max_old_space_size=8192 webpack -d --mode development --watch",
     "build": "webpack --mode development"
   },
   "dependencies": {
