@@ -324,4 +324,100 @@ defmodule Quackbox.Games do
   def new_player() do
     Ecto.Changeset.change(%Player{})
   end
+
+  alias Quackbox.Games.AudienceMember
+
+  @doc """
+  Returns the list of audience_members.
+
+  ## Examples
+
+      iex> list_audience_members()
+      [%AudienceMember{}, ...]
+
+  """
+  def list_audience_members do
+    Repo.all(AudienceMember)
+  end
+
+  @doc """
+  Gets a single audience_member.
+
+  Raises `Ecto.NoResultsError` if the Audience member does not exist.
+
+  ## Examples
+
+      iex> get_audience_member!(123)
+      %AudienceMember{}
+
+      iex> get_audience_member!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_audience_member!(id), do: Repo.get!(AudienceMember, id)
+
+  @doc """
+  Creates a audience_member.
+
+  ## Examples
+
+      iex> create_audience_member(%{field: value})
+      {:ok, %AudienceMember{}}
+
+      iex> create_audience_member(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_audience_member(attrs \\ %{}) do
+    %AudienceMember{}
+    |> AudienceMember.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a audience_member.
+
+  ## Examples
+
+      iex> update_audience_member(audience_member, %{field: new_value})
+      {:ok, %AudienceMember{}}
+
+      iex> update_audience_member(audience_member, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_audience_member(%AudienceMember{} = audience_member, attrs) do
+    audience_member
+    |> AudienceMember.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a AudienceMember.
+
+  ## Examples
+
+      iex> delete_audience_member(audience_member)
+      {:ok, %AudienceMember{}}
+
+      iex> delete_audience_member(audience_member)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_audience_member(%AudienceMember{} = audience_member) do
+    Repo.delete(audience_member)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking audience_member changes.
+
+  ## Examples
+
+      iex> change_audience_member(audience_member)
+      %Ecto.Changeset{source: %AudienceMember{}}
+
+  """
+  def change_audience_member(%AudienceMember{} = audience_member) do
+    AudienceMember.changeset(audience_member, %{})
+  end
 end
