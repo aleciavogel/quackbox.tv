@@ -1,1 +1,2 @@
+<script>window.playerToken = "<%= @player_token %>"</script>
 <div id="app"></div>
