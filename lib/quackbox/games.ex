@@ -157,7 +157,7 @@ defmodule Quackbox.Games do
   def create_room(attrs \\ %{}) do
     %Room{}
     |> Room.changeset(attrs)
-    |> Repo.insert!()
+    |> Repo.insert()
   end
 
   @doc """
