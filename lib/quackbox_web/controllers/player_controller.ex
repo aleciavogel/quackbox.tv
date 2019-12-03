@@ -9,7 +9,6 @@ defmodule QuackboxWeb.PlayerController do
     case Games.create_player_or_audience_member(attrs) do
       {:ok, %Player{} = player} ->
         token = Phoenix.Token.sign(conn, "player token", player.id)
-
         conn
         |> put_session(:current_player_id, player.id)
         |> put_session(:player_token, token)
