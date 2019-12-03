@@ -19,7 +19,7 @@ defmodule QuackboxWeb.PlayerController do
         token = Phoenix.Token.sign(conn, "audience token", audience_member.id)
         conn
         |> assign(:current_member, audience_member)
-        |> assign(:current_player_id, audience_member.id)
+        |> assign(:current_member_id, audience_member.id)
         |> assign(:audience_token, token)
         |> redirect(to: Routes.room_watch_path(conn, :show, access_code))
 
