@@ -1,8 +1,5 @@
 defmodule QuackboxWeb.RoomChannel do
   use QuackboxWeb, :channel
-  alias Quackbox.Repo
-  alias Quackbox.Games
-  alias Quackbox.Games.{Player, AudienceMember}
 
   def join("room:" <> room_id, _params, socket) do
     player_id = socket.assigns[:current_player_id]
