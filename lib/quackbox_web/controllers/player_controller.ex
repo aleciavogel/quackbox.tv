@@ -31,11 +31,11 @@ defmodule QuackboxWeb.PlayerController do
     end
   end
   
-  def show(conn, _params) do
+  def show(conn, %{"room_access_code" => access_code}) do
     player_token = get_session(conn, :player_token)
 
     conn
     |> put_layout({QuackboxWeb.LayoutView, "player.html"})
-    |> render("show.html", player_token: player_token)
+    |> render("show.html", player_token: player_token, access_code: access_code)
   end
 end

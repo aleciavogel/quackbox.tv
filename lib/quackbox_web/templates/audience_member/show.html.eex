@@ -1,2 +1,5 @@
-<script>window.audienceToken = "<%= @audience_token %>"</script>
+<script>
+  window.audienceToken = "<%= @audience_token %>"
+  window.roomID = "<%= @access_code %>"
+</script>
 <div id="app"></div>
