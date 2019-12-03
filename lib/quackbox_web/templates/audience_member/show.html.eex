@@ -1,1 +1,2 @@
+<script>window.audienceToken = "<%= @audience_token %>"</script>
 <div id="app"></div>
