@@ -2,11 +2,9 @@ defmodule QuackboxWeb.AudienceMemberController do
   use QuackboxWeb, :controller
   alias Quackbox.Games
 
-  def show(conn, %{"token" => token}) do
-    audience = Games.get_audience_member!(token)
-
+  def show(conn, _params) do
     conn
     |> put_layout({QuackboxWeb.LayoutView, "audience.html"})
-    |> render("show.html", audience_member: audience)
+    |> render("show.html")
   end
 end

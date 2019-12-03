@@ -8,12 +8,20 @@ defmodule QuackboxWeb.PlayerController do
 
     case Games.create_player_or_audience_member(attrs) do
       {:ok, %Player{} = player} ->
+        token = Phoenix.Token.sign(conn, "player token", player.id)
         conn
-        |> redirect(to: Routes.room_play_path(conn, :show, access_code, player.token))
+        |> assign(:current_player, player)
+        |> assign(:current_player_id, player.id)
+        |> assign(:player_token, token)
+        |> redirect(to: Routes.room_play_path(conn, :show, access_code))
       
       {:ok, %AudienceMember{} = audience_member} ->
+        token = Phoenix.Token.sign(conn, "audience token", audience_member.id)
         conn
-        |> redirect(to: Routes.room_watch_path(conn, :show, access_code, audience_member.token))
+        |> assign(:current_member, audience_member)
+        |> assign(:current_player_id, audience_member.id)
+        |> assign(:audience_token, token)
+        |> redirect(to: Routes.room_watch_path(conn, :show, access_code))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         conn
@@ -27,11 +35,9 @@ defmodule QuackboxWeb.PlayerController do
     end
   end
   
-  def show(conn, %{"token" => player_token}) do
-    player = Games.get_player!(player_token)
-
+  def show(conn, _params) do
     conn
     |> put_layout({QuackboxWeb.LayoutView, "player.html"})
-    |> render("show.html", player: player)
+    |> render("show.html")
   end
 end
