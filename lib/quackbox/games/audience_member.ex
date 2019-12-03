@@ -14,16 +14,8 @@ defmodule Quackbox.Games.AudienceMember do
   def changeset(audience_member, attrs, room) do
     audience_member
     |> cast(attrs, [:name])
-    |> generate_token()
-    |> validate_required([:name, :token])
-    |> unique_constraint(:token)
+    |> validate_required([:name])
     |> put_assoc?(:room, room)
-  end
-
-  defp generate_token(changes) do
-    chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    token = Nanoid.generate_non_secure(21, chars)
-    put_change(changes, :token, token)
   end
 
   defp put_assoc?(changes, _atom, nil) do
