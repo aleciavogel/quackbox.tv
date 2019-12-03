@@ -10,14 +10,12 @@ defmodule QuackboxWeb.PlayerController do
       {:ok, %Player{} = player} ->
         token = Phoenix.Token.sign(conn, "player token", player.id)
         conn
-        |> put_session(:current_player_id, player.id)
         |> put_session(:player_token, token)
         |> redirect(to: Routes.room_play_path(conn, :show, access_code))
       
       {:ok, %AudienceMember{} = audience_member} ->
         token = Phoenix.Token.sign(conn, "audience token", audience_member.id)
         conn
-        |> put_session(:current_audience_id, audience_member.id)
         |> put_session(:audience_token, token)
         |> redirect(to: Routes.room_watch_path(conn, :show, access_code))
 
