@@ -4,7 +4,6 @@ defmodule Quackbox.Games.Player do
 
   schema "players" do
     field :name, :string
-    field :token, :string
     belongs_to :room, Quackbox.Games.Room
 
     timestamps()

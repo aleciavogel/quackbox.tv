@@ -4,7 +4,6 @@ defmodule Quackbox.Games.AudienceMember do
 
   schema "audience_members" do
     field :name, :string
-    field :token, :string
     
     belongs_to :room, Quackbox.Games.Room
 
