@@ -1,6 +1,7 @@
 defmodule QuackboxWeb.RoomController do
   use QuackboxWeb, :controller
   alias Quackbox.Games
+  alias Quackbox.Games.Room
 
   def create(conn, %{"room" => %{"game_id" => game_id, "max_players" => max_players}}) do
     room = Games.create_room(%{
@@ -9,7 +10,15 @@ defmodule QuackboxWeb.RoomController do
       max_players: max_players
     })
 
-    conn
-    |> redirect(to: Routes.room_host_path(conn, :index, room.access_code))
+    case Games.create_room(attrs) do
+      {:ok, %Room{} = room} ->
+        conn
+        |> redirect(to: Routes.room_host_path(conn, :index, room.access_code))
+      
+      {:error, %Ecto.Changeset{} = changeset} ->
+        conn
+        |> put_view(QuackboxWeb.PageView)
+        |> render("index.html", games: Games.list_games())
+    end
   end
 end

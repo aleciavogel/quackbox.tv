@@ -139,7 +139,7 @@ defmodule Quackbox.Games do
           where: r.access_code == ^access_code,
           where: is_nil(r.finished_at)
           
-    Repo.one(query)
+    Repo.all(query)
   end
 
   @doc """
