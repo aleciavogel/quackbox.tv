@@ -7,7 +7,8 @@ export default class App extends React.Component {
       "/socket", 
       {
         params: {
-          player_token: window.playerToken
+          player_token: window.playerToken,
+          access_code: window.roomID
         }
       }
     )
@@ -20,6 +21,9 @@ export default class App extends React.Component {
     channel.join()
       .receive('ok', response => {
         console.log("Joined successfully", response)
+      })
+      .receive('error', response => {
+        console.log("Unable to join.", response)
       })
   }
 

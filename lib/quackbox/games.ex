@@ -5,7 +5,7 @@ defmodule Quackbox.Games do
 
   import Ecto.Query, warn: false
   alias Quackbox.Repo
-  alias Quackbox.Games.{Game, Player, Room}
+  alias Quackbox.Games.{Game, Player, AudienceMember, Room}
 
   @doc """
   Returns the list of games.
@@ -241,12 +241,13 @@ defmodule Quackbox.Games do
       ** (Ecto.NoResultsError)
 
   """
-  def get_player!(player_token) do
+  def get_player!(id) do
     query = from p in Player,
-          where: p.token == ^player_token,
+          where: p.id == ^id,
+          limit: 1,
           preload: [:room]
 
-    Repo.one(query)
+    Repo.all(query)
   end
 
   @doc """

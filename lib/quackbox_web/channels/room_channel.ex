@@ -1,7 +1,17 @@
 defmodule QuackboxWeb.RoomChannel do
   use QuackboxWeb, :channel
+  alias Quackbox.Repo
+  alias Quackbox.Games
+  alias Quackbox.Games.{Player, AudienceMember}
 
-  def join(channel_name, _params, socket) do
-    {:ok, %{channel: channel_name}, socket}
+  def join("room:" <> room_id, _params, socket) do
+    player_id = socket.assigns[:current_player_id]
+    audience_id = socket.assigns[:current_audience_id]
+
+    if player_id || audience_id do
+      {:ok, %{channel: "room:#{room_id}"}, socket}
+    else
+      {:error, %{reason: "Invalid session."}}
+    end
   end
 end
