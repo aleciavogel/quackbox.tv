@@ -1,8 +1,6 @@
 defmodule QuackboxWeb.UserSocket do
   use Phoenix.Socket
 
-  require Logger
-
   ## Channels
   channel "room:*", QuackboxWeb.RoomChannel
 
