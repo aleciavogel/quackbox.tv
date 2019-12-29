@@ -1,1 +1,5 @@
+<script>
+  window.hostToken = "<%= @host_token %>"
+  window.roomID = "<%= @access_code %>"
+</script>
 <div id="app"></div>

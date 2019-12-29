@@ -10,9 +10,12 @@ defmodule QuackboxWeb.RoomController do
       max_players: max_players
     }
 
+    token = Phoenix.Token.sign(conn, "host token", Pow.Plug.current_user(conn).id)
+
     case Games.create_room(attrs) do
       {:ok, %Room{} = room} ->
         conn
+        |> put_session(:host_token, token)
         |> redirect(to: Routes.room_host_path(conn, :index, room.access_code))
       
       {:error, %Ecto.Changeset{} = changeset} ->

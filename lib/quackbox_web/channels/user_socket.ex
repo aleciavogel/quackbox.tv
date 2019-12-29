@@ -1,8 +1,5 @@
 defmodule QuackboxWeb.UserSocket do
   use Phoenix.Socket
-  alias Quackbox.Repo
-  alias Quackbox.Games
-  alias Quackbox.Games.{Player, AudienceMember}
 
   require Logger
 
@@ -24,15 +21,7 @@ defmodule QuackboxWeb.UserSocket do
   def connect(%{"player_token" => token, "access_code" => access_code}, socket, _connect_info) do
     case Phoenix.Token.verify(socket, "player token", token, max_age: @max_age) do
       {:ok, player_id} ->
-        player = 
-          Repo.get(Player, player_id)
-          |> Repo.preload(:room)
-
-        if player.room.access_code === access_code do
-          {:ok, assign(socket, :current_player_id, player_id)}
-        else
-          {:ok, socket}
-        end
+        {:ok, assign(socket, :current_player_id, player_id)}
 
       {:error, _reason} ->
         {:ok, socket}
@@ -42,15 +31,17 @@ defmodule QuackboxWeb.UserSocket do
   def connect(%{"audience_token" => token, "access_code" => access_code}, socket, _connect_info) do
     case Phoenix.Token.verify(socket, "audience token", token, max_age: @max_age) do
       {:ok, audience_id} ->
-        audience = 
-          Repo.get(Audience, audience_id)
-          |> Repo.preload(:room)
+        {:ok, assign(socket, :current_audience_id, audience_id)}
 
-        if audience.room.access_code === access_code do
-          {:ok, assign(socket, :current_audience_id, audience_id)}
-        else
-          {:ok, socket}
-        end
+      {:error, _reason} ->
+        {:ok, socket}
+    end
+  end
+
+  def connect(%{"host_token" => token, "access_code" => access_code}, socket, _connect_info) do
+    case Phoenix.Token.verify(socket, "host token", token, max_age: @max_age) do
+      {:ok, host_id} ->
+        {:ok, assign(socket, :current_host_id, host_id)}
 
       {:error, _reason} ->
         {:ok, socket}

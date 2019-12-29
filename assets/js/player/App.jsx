@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Socket } from 'phoenix'
 
-export default class App extends React.Component {
+export default class App extends Component {
   componentDidMount() {
     let socket = new Socket(
       "/socket", 
