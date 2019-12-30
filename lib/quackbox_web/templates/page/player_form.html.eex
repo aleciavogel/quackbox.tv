@@ -6,7 +6,7 @@
 
     <div class="form-group">
         <%= label f, :name, "Name" %>
-        <%= text_input f, :name, class: "form-control#{invalid_name}", placeholder: "Enter your name" %>
+        <%= text_input f, :name, class: "form-control#{invalid_name}", placeholder: "Enter your name", autocomplete: "off" %>
         <div class="invalid-feedback">
             <%= error_tag f, :name %>
         </div>
@@ -14,7 +14,7 @@
 
     <div class="form-group">
         <%= label f, :access_code, "Room Code" %>
-        <%= text_input f, :access_code, class:  "form-control#{invalid_code}", placeholder: "Enter 4-letter code" %>
+        <%= text_input f, :access_code, class:  "form-control#{invalid_code}", placeholder: "Enter 4-letter code", autocomplete: "off" %>
         <div class="invalid-feedback">
             <%= error_tag f, :access_code %>
         </div>
