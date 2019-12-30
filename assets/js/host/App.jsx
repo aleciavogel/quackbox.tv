@@ -14,6 +14,9 @@ export default class App extends Component {
     channel.on("player:joined", ({name}) => {
       console.log(`${name} has joined the game`)
     })
+    channel.on("audience:joined", ({name}) => {
+      console.log(`${name} has joined the game as an audience member`)
+    })
   }
 
   componentDidMount() {
