@@ -16,21 +16,35 @@ export default class App extends Component {
     const self = this
 
     channel.on('presence_state', response => {
-      self.syncPresentUsers(response)
+      const { presences: old_presences } = this.state
+      const presences = Presence.syncState(old_presences, response)
+      const { players, audience_members } = self.sortPresenceUsers(presences)
+
+      this.setState({
+        players,
+        audience_members,
+        presences
+      })
     })
 
     channel.on('presence_diff', response => {
-      self.syncPresentUsers(response)
+      const { presences: old_presences } = this.state
+      const presences = Presence.syncDiff(old_presences, response)
+      const { players, audience_members } = self.sortPresentUsers(presences)
+
+      this.setState({
+        players,
+        audience_members,
+        presences
+      })
     })
   }
 
-  syncPresentUsers(response) {
+  sortPresentUsers(presences) {
     const players = []
     const audience_members = []
-    const { presences: old_presences } = this.state
-    const new_presences = Presence.syncDiff(old_presences, response)
 
-    Presence.list(new_presences).map(p => {
+    Presence.list(presences).map(p => {
       const participant = p.metas[0]
 
       if (participant.type == 'player') {
@@ -40,11 +54,10 @@ export default class App extends Component {
       }
     })
 
-    this.setState({
-      presences: new_presences,
+    return {
       players,
       audience_members
-    })
+    }
   }
 
   componentDidMount() {
@@ -67,6 +80,14 @@ export default class App extends Component {
     channel.join()
       .receive('ok', response => {
         console.log("Joined successfully", response)
+
+        const { players, audience_members } = this.sortPresentUsers(response.presences)
+
+        this.setState({
+          presences: response.presences,
+          players,
+          audience_members
+        })
         self.setupChannelMessageHandlers(channel)
       })
       .receive('error', response => {
