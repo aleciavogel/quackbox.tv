@@ -11,9 +11,11 @@ defmodule Quackbox.Application do
       # Start the Ecto repository
       Quackbox.Repo,
       # Start the endpoint when the application starts
-      QuackboxWeb.Endpoint
+      QuackboxWeb.Endpoint,
       # Starts a worker by calling: Quackbox.Worker.start_link(arg)
       # {Quackbox.Worker, arg},
+      # Start tracking channel presences
+      QuackboxWeb.Presence
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
