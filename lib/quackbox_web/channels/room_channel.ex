@@ -1,8 +1,8 @@
 defmodule QuackboxWeb.RoomChannel do
   use QuackboxWeb, :channel
   alias Quackbox.Repo
-  alias Quackbox.Games
   alias Quackbox.Games.{Player, AudienceMember, Room}
+  alias QuackboxWeb.Presence
 
   def join("room:" <> access_code, _params, socket) do
     player_id = socket.assigns[:current_player_id]
@@ -19,7 +19,7 @@ defmodule QuackboxWeb.RoomChannel do
             name: player.name,
             id: player.id
           }
-          send(self, {:after_player_join, player_info})
+          send(self(), {:after_player_join, player_info})
           {:ok, %{channel: "room:#{access_code}"}, socket}
         else
           {:error, %{reason: "Invalid session."}}
@@ -34,14 +34,14 @@ defmodule QuackboxWeb.RoomChannel do
             name: audience.name,
             id: audience.id
           }
-          send(self, {:after_player_join, audience_info})
+          send(self(), {:after_player_join, audience_info})
           {:ok, %{channel: "room:#{access_code}"}, socket}
         else
           {:error, %{reason: "Invalid session."}}
         end
       
       host_id != nil ->
-        {:ok, %{channel: "room:#{access_code}"}, socket}
+        {:ok, %{channel: "room:#{access_code}", presences: Presence.list(socket)}, socket}
 
       true ->
         {:error, %{reason: "Invalid session."}}
@@ -49,12 +49,22 @@ defmodule QuackboxWeb.RoomChannel do
   end
 
   def handle_info({:after_player_join, player}, socket) do
-    broadcast!(socket, "player:joined", player)
+    push(socket, "presence_state", Presence.list(socket))
+    {:ok, _} = Presence.track(socket, "player:#{player.id}", %{
+      name: player.name,
+      id: player.id,
+      type: "player"
+    })
     {:noreply, socket}
   end
 
   def handle_info({:after_audience_join, audience}, socket) do
-    broadcast!(socket, "audience:joined", audience)
+    push(socket, "presence_state", Presence.list(socket))
+    {:ok, _} = Presence.track(socket, "audience:#{audience.id}", %{
+      name: audience.name,
+      id: audience.id,
+      type: "audience"
+    })
     {:noreply, socket}
   end
 end
