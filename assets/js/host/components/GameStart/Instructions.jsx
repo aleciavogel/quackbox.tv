@@ -5,9 +5,6 @@ import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    // textAlign: 'center'
-  },
   button: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
