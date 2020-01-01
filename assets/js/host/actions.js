@@ -51,12 +51,12 @@ const sortPresentUsers = (presences) => {
     } else {
       audience_members.push(participant)
     }
-
-    return {
-      players,
-      audience_members
-    }
   })
+
+  return {
+    players,
+    audience_members
+  }
 }
 
 const syncPresentUsers = (dispatch, presences) => {

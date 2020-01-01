@@ -28,7 +28,6 @@ let socket = new Socket(
   }
 )
 
-// This code starts up the React app when it runs in a browser injects the app into a DOM element.
 ReactDOM.render(
   <Provider store={store}>
     <HostApp socket={socket} room_id={room_id} />
