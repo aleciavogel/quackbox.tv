@@ -53,6 +53,7 @@ defmodule QuackboxWeb.RoomChannel do
     {:ok, _} = Presence.track(socket, "player:#{player.id}", %{
       name: player.name,
       id: player.id,
+      online_at: inspect(System.system_time(:second)),
       type: "player"
     })
     {:noreply, socket}

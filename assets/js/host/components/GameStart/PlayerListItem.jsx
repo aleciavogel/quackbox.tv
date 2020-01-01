@@ -2,6 +2,8 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
+import FlagIcon from '@material-ui/icons/Flag'
+import grey from '@material-ui/core/colors/grey'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -10,16 +12,21 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(1),
     paddingRight: theme.spacing(2),
     marginBottom: theme.spacing(2)
+  },
+  icon: {
+    color: grey[500]
   }
 }))
 
-const PlayerListItem = ({ name }) => {
+const PlayerListItem = ({ name, is_lead }) => {
   const classes = useStyles()
 
   return (
     <Paper variant="outlined" className={classes.root}>
       <Typography variant="h4">
-        {name}
+        {name} {is_lead && (
+          <FlagIcon className={classes.icon} />
+        )}
       </Typography>
     </Paper>
   )

@@ -10,7 +10,8 @@ const initialState = {
   room: null,
   channel: null,
   error: null,
-  loading: true
+  loading: true,
+  lead_player_id: null
 }
 
 const reducer = (state = initialState, action = {}) => {
@@ -23,13 +24,15 @@ const reducer = (state = initialState, action = {}) => {
         players: action.players,
         audience_members: action.audience_members,
         error: null,
-        loading: false
+        loading: false,
+        lead_player_id: action.lead_player_id
       }
     case UPDATE_PARTICIPANTS:
       return {
         ...state,
         players: action.players,
         audience_members: action.audience_members,
+        lead_player_id: action.lead_player_id,
         error: null
       }
     case RECEIVE_ERROR:

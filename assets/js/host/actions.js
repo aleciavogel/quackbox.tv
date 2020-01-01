@@ -11,13 +11,15 @@ export const joinRoom = (socket, room_id) => {
 
     channel.join()
       .receive('ok', response => {
-        const { players, audience_members } = sortPresentUsers(response.presences)
+        const { players, audience_members, lead_player_id } = sortPresentUsers(response.presences)
+
         dispatch({
           type: JOIN_ROOM,
           room: room_id,
           players,
           audience_members,
-          channel
+          channel,
+          lead_player_id
         })
       })
       .receive('error', ({ reason }) => {
@@ -42,6 +44,7 @@ export const joinRoom = (socket, room_id) => {
 const sortPresentUsers = (presences) => {
   const players = []
   const audience_members = []
+  let lead_player_id = null
 
   Presence.list(presences).map(p => {
     const participant = p.metas[0]
@@ -53,18 +56,29 @@ const sortPresentUsers = (presences) => {
     }
   })
 
+  // Sort by the online_at timestamp
+  players.sort((x, y) => (
+    x.online_at - y.online_at
+  ))
+
+  if (players.length > 0) {
+    lead_player_id = players[0].id
+  }
+
   return {
     players,
-    audience_members
+    audience_members,
+    lead_player_id
   }
 }
 
 const syncPresentUsers = (dispatch, presences) => {
-  const { players, audience_members } = sortPresentUsers(presences)
+  const { players, audience_members, lead_player_id } = sortPresentUsers(presences)
 
   dispatch({
     type: UPDATE_PARTICIPANTS,
     players,
-    audience_members
+    audience_members,
+    lead_player_id
   })
 }
