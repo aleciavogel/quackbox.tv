@@ -3,6 +3,9 @@ import { connect } from 'react-redux'
 
 import { joinRoom } from './actions'
 
+import GameStart from './scenes/GameStart'
+import Loading from './scenes/Loading'
+
 class App extends Component {
   componentDidMount() {
     const { dispatch, socket, room_id } = this.props
@@ -11,36 +14,25 @@ class App extends Component {
   }
 
   render() {
-    const { players, audience_members } = this.props
+    const { loading, room_id } = this.props
 
-    return (
-      <>
-        <h1>Welcome to the host component</h1>
-
-        Players:
-        <ul>
-          {players.map(player => (
-            <li key={player.id}>{player.name}</li>
-          ))}
-        </ul>
-
-        Audience Members:
-        <ul>
-          {audience_members.map(audience => (
-            <li key={audience.id}>{audience.name}</li>
-          ))}
-        </ul>
-      </>
-    )
+    if (loading) {
+      return (
+        <Loading />
+      )
+    } else {
+      return (
+        <GameStart room_id={room_id}/>
+      )
+    }
   }
 }
 
 function mapStateToProps(state) {
-  const { players, audience_members } = state
+  const { loading } = state
 
   return {
-    players,
-    audience_members
+    loading
   }
 }
 
