@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     right: theme.spacing(3),
     bottom: theme.spacing(3),
-    padding: theme.spacing(1),
+    padding: theme.spacing(1)
   },
   number: {
     textAlign: 'center'
