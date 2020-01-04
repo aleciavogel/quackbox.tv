@@ -21,6 +21,9 @@
           <%= if Pow.Plug.current_user(@conn) do %>
             <%= if Pow.Plug.current_user(@conn).role == "admin" do %>
               <li class="nav-item">
+                <%= link "Categories", to: Routes.admin_category_path(@conn, :index), class: "nav-link" %>
+              </li>
+              <li class="nav-item">
                 <%= link "Questions", to: Routes.admin_question_path(@conn, :index), class: "nav-link" %>
               </li>
             <% end %>

@@ -20,7 +20,8 @@ defmodule QuackboxWeb.Router do
 
   scope "/admin", QuackboxWeb.Admin, as: :admin do
     pipe_through [:browser, :admin]
-
+    
+    resources "/categories", CategoryController
     resources "/questions", QuestionController
   end
 
