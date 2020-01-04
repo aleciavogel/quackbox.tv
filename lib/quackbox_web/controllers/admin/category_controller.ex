@@ -18,7 +18,7 @@ defmodule QuackboxWeb.Admin.CategoryController do
     user_id = Pow.Plug.current_user(conn).id
 
     case Content.create_category(category_params, user_id) do
-      {:ok, category} ->
+      {:ok, %{:model => %Category{} = category}} ->
         conn
         |> put_flash(:info, "Category created successfully.")
         |> redirect(to: Routes.admin_category_path(conn, :show, category))
@@ -44,7 +44,7 @@ defmodule QuackboxWeb.Admin.CategoryController do
     user_id = Pow.Plug.current_user(conn).id
 
     case Content.update_category(category, category_params, user_id) do
-      {:ok, category} ->
+      {:ok, %{:model => %Category{} = category}} ->
         conn
         |> put_flash(:info, "Category updated successfully.")
         |> redirect(to: Routes.admin_category_path(conn, :show, category))
