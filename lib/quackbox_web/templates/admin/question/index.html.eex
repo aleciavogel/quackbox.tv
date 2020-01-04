@@ -1,0 +1,30 @@
+<h1>Listing Questions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Prompt</th>
+      <th>Truth</th>
+      <th>Lie</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for question <- @questions do %>
+    <tr>
+      <td><%= question.prompt %></td>
+      <td><%= question.truth %></td>
+      <td><%= question.lie %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.admin_question_path(@conn, :show, question) %></span>
+        <span><%= link "Edit", to: Routes.admin_question_path(@conn, :edit, question) %></span>
+        <span><%= link "Delete", to: Routes.admin_question_path(@conn, :delete, question), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Question", to: Routes.admin_question_path(@conn, :new) %></span>

@@ -1,0 +1,23 @@
+<h1>Show Question</h1>
+
+<ul>
+
+  <li>
+    <strong>Prompt:</strong>
+    <%= @question.prompt %>
+  </li>
+
+  <li>
+    <strong>Truth:</strong>
+    <%= @question.truth %>
+  </li>
+
+  <li>
+    <strong>Lie:</strong>
+    <%= @question.lie %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.admin_question_path(@conn, :edit, @question) %></span>
+<span><%= link "Back", to: Routes.admin_question_path(@conn, :index) %></span>

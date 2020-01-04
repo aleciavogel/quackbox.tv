@@ -19,6 +19,11 @@
       <div class="navbar-collapse collapse w-100" id="navbarMenu">
         <ul class="navbar-nav w-100 justify-content-center text-center">
           <%= if Pow.Plug.current_user(@conn) do %>
+            <%= if Pow.Plug.current_user(@conn).role == "admin" do %>
+              <li class="nav-item">
+                <%= link "Questions", to: Routes.admin_question_path(@conn, :index), class: "nav-link" %>
+              </li>
+            <% end %>
             <li class="nav-item">
               <%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete, class: "nav-link" %>
             </li>

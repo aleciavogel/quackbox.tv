@@ -14,6 +14,16 @@ defmodule QuackboxWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :admin do
+    plug QuackboxWeb.EnsureRolePlug, :admin
+  end
+
+  scope "/admin", QuackboxWeb.Admin, as: :admin do
+    pipe_through [:browser, :admin]
+
+    resources "/questions", QuestionController
+  end
+
   scope "/" do
     pipe_through :browser
 
