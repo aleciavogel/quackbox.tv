@@ -145,10 +145,10 @@ defmodule Quackbox.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_category(attrs \\ %{}) do
+  def create_category(attrs \\ %{}, user_id) do
     %Category{}
     |> Category.changeset(attrs)
-    |> Repo.insert()
+    |> PaperTrail.insert(originator_id: user_id)
   end
 
   @doc """
@@ -163,10 +163,10 @@ defmodule Quackbox.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_category(%Category{} = category, attrs) do
+  def update_category(%Category{} = category, attrs, user_id) do
     category
     |> Category.changeset(attrs)
-    |> Repo.update()
+    |> PaperTrail.update(originator_id: user_id)
   end
 
   @doc """
@@ -181,8 +181,8 @@ defmodule Quackbox.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_category(%Category{} = category) do
-    Repo.delete(category)
+  def delete_category(%Category{} = category, user_id) do
+    Repo.delete(category, originator_id: user_id)
   end
 
   @doc """
