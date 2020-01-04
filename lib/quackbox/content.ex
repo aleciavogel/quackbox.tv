@@ -49,10 +49,10 @@ defmodule Quackbox.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_question(attrs \\ %{}) do
+  def create_question(attrs \\ %{}, user_id) do
     %Question{}
     |> Question.changeset(attrs)
-    |> Repo.insert()
+    |> PaperTrail.insert(originator_id: user_id)
   end
 
   @doc """
@@ -67,10 +67,10 @@ defmodule Quackbox.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_question(%Question{} = question, attrs) do
+  def update_question(%Question{} = question, attrs, user_id) do
     question
     |> Question.changeset(attrs)
-    |> Repo.update()
+    |> PaperTrail.update(originator_id: user_id)
   end
 
   @doc """
@@ -85,8 +85,8 @@ defmodule Quackbox.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_question(%Question{} = question) do
-    Repo.delete(question)
+  def delete_question(%Question{} = question, user_id) do
+    PaperTrail.delete(question, originator_id: user_id)
   end
 
   @doc """

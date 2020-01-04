@@ -15,8 +15,10 @@ defmodule QuackboxWeb.Admin.QuestionController do
   end
 
   def create(conn, %{"question" => question_params}) do
-    case Content.create_question(question_params) do
-      {:ok, question} ->
+    user_id = Pow.Plug.current_user(conn).id
+
+    case Content.create_question(question_params, user_id) do
+      {:ok, %{:model => %Question{} = question}} ->
         conn
         |> put_flash(:info, "Question created successfully.")
         |> redirect(to: Routes.admin_question_path(conn, :show, question))
@@ -39,9 +41,10 @@ defmodule QuackboxWeb.Admin.QuestionController do
 
   def update(conn, %{"id" => id, "question" => question_params}) do
     question = Content.get_question!(id)
+    user_id = Pow.Plug.current_user(conn).id
 
-    case Content.update_question(question, question_params) do
-      {:ok, question} ->
+    case Content.update_question(question, question_params, user_id) do
+      {:ok, %{:model => %Question{} = question}} ->
         conn
         |> put_flash(:info, "Question updated successfully.")
         |> redirect(to: Routes.admin_question_path(conn, :show, question))
@@ -53,7 +56,9 @@ defmodule QuackboxWeb.Admin.QuestionController do
 
   def delete(conn, %{"id" => id}) do
     question = Content.get_question!(id)
-    {:ok, _question} = Content.delete_question(question)
+    user_id = Pow.Plug.current_user(conn).id
+
+    {:ok, _question} = Content.delete_question(question, user_id)
 
     conn
     |> put_flash(:info, "Question deleted successfully.")

@@ -44,7 +44,8 @@ defmodule Quackbox.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:pow, "~> 1.0.13"},
-      {:nanoid, "~> 2.0.2"}
+      {:nanoid, "~> 2.0.2"},
+      {:paper_trail, "~> 0.8.2"}
     ]
   end
 
