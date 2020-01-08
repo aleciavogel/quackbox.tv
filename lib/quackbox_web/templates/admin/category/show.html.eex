@@ -9,10 +9,10 @@
     </div>
   </div>
 
-  <p class="lead text-muted mb-0">Category</p>
-  <h1 class="display-4 mb-4">
+  <h1 class="display-4">
     <%= @category.name %>
   </h1>
+  <p class="lead text-muted mb-5">Created <%= time_ago_in_words(@category.inserted_at) %></p>
 
   <h4>
     Questions
@@ -24,14 +24,16 @@
         <th>Prompt</th>
         <th>Truth</th>
         <th>Our Lie</th>
+        <th>Created</th>
       </tr>
     </thead>
     <tbody>
       <%= for question <- @category.questions do %>
         <tr>
-          <td><%= question.prompt %></td>
+          <td><%= link question.prompt, to: Routes.admin_question_path(@conn, :show, question) %></td>
           <td><%= question.truth %></td>
           <td><%= question.lie %></td>
+          <td><%= time_ago_in_words(question.inserted_at) %></td>
         </tr>
       <% end %>
     </tbody>

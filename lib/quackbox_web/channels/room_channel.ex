@@ -1,7 +1,7 @@
 defmodule QuackboxWeb.RoomChannel do
   use QuackboxWeb, :channel
   alias Quackbox.Repo
-  alias Quackbox.Games.{Player, AudienceMember, Room}
+  alias Quackbox.Games.{Player, AudienceMember}
   alias QuackboxWeb.Presence
 
   def join("room:" <> access_code, _params, socket) do

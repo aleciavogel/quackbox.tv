@@ -20,6 +20,7 @@
             <th>Truth</th>
             <th>Lie</th>
             <th>Category</th>
+            <th>Created</th>
 
             <th></th>
           </tr>
@@ -30,7 +31,8 @@
               <td><%= question.prompt %></td>
               <td><%= question.truth %></td>
               <td><%= question.lie %></td>
-              <td><%= question.category.name %></td>
+              <td><%= link question.category.name, to: Routes.admin_category_path(@conn, :show, question.category) %></td>
+              <td><%= time_ago_in_words(question.inserted_at) %></td>
 
               <td>
                 <span><%= link "View", to: Routes.admin_question_path(@conn, :show, question) %></span>

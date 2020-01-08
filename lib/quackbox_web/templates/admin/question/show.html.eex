@@ -12,12 +12,10 @@
 
   <div class="row">
     <div class="col">
-      <p class="lead text-muted mb-0">
-        Question
-      </p>
-      <h1 class="display-4">
-        "<%= @question.prompt %>"
+      <h1 class="display-4 mb-0">
+        <%= @question.prompt %>
       </h1>
+      <p class="lead text-muted mb-3">Created <%= time_ago_in_words(@question.inserted_at) %></p>
     </div>
   </div>
 
@@ -36,7 +34,7 @@
 
         <li>
           <strong>Category:</strong>
-          <%= @question.category.name %>
+          <%= link @question.category.name, to: Routes.admin_category_path(@conn, :show, @question.category) %>
         </li>
       </ul>
     </div>
@@ -51,7 +49,7 @@
         <thead>
           <tr>
             <th>Event</th>
-            <th>Date & Time</th>
+            <th>When</th>
             <th>User</th>
           </tr>
         </thead>
@@ -59,7 +57,7 @@
           <%= for version <- @versions do %>
             <tr>
               <td><%= version.event %></td>
-              <td><%= version.inserted_at %></td>
+              <td><%= time_ago_in_words(version.inserted_at) %></td>
               <td><%= version.originator_id %></td>
             </tr>
           <% end %>

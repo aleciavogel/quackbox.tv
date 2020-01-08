@@ -15,6 +15,7 @@
           <tr>
             <th>Name</th>
             <th># Questions</th>
+            <th>Created</th>
 
             <th></th>
           </tr>
@@ -24,6 +25,7 @@
               <tr>
                 <td><%= category.name %></td>
                 <td><%= category.question_count %></td>
+                <td><%= time_ago_in_words(category.inserted_at) %></td>
 
                 <td>
                   <span><%= link "View", to: Routes.admin_category_path(@conn, :show, category) %></span>

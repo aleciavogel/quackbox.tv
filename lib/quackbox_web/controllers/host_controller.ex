@@ -6,7 +6,7 @@ defmodule QuackboxWeb.HostController do
     host_token = get_session(conn, :host_token)
 
     case Games.get_room!(access_code) do
-      [room] ->
+      [_room] ->
         conn
         |> put_layout({QuackboxWeb.LayoutView, "host.html"})
         |> render("index.html", access_code: access_code, host_token: host_token)

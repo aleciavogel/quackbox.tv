@@ -16,7 +16,7 @@ defmodule QuackboxWeb.UserSocket do
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
   @max_age 24 * 60 * 60
-  def connect(%{"player_token" => token, "access_code" => access_code}, socket, _connect_info) do
+  def connect(%{"player_token" => token, "access_code" => _access_code}, socket, _connect_info) do
     case Phoenix.Token.verify(socket, "player token", token, max_age: @max_age) do
       {:ok, player_id} ->
         {:ok, assign(socket, :current_player_id, player_id)}
@@ -26,7 +26,7 @@ defmodule QuackboxWeb.UserSocket do
     end
   end
 
-  def connect(%{"audience_token" => token, "access_code" => access_code}, socket, _connect_info) do
+  def connect(%{"audience_token" => token, "access_code" => _access_code}, socket, _connect_info) do
     case Phoenix.Token.verify(socket, "audience token", token, max_age: @max_age) do
       {:ok, audience_id} ->
         {:ok, assign(socket, :current_audience_id, audience_id)}
@@ -36,7 +36,7 @@ defmodule QuackboxWeb.UserSocket do
     end
   end
 
-  def connect(%{"host_token" => token, "access_code" => access_code}, socket, _connect_info) do
+  def connect(%{"host_token" => token, "access_code" => _access_code}, socket, _connect_info) do
     case Phoenix.Token.verify(socket, "host token", token, max_age: @max_age) do
       {:ok, host_id} ->
         {:ok, assign(socket, :current_host_id, host_id)}
