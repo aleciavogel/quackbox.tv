@@ -51,8 +51,8 @@
             <th>Event</th>
             <th>When</th>
             <th>Prompt</th>
-            <th>Lie</th>
             <th>Truth</th>
+            <th>Lie</th>
             <th>Category</th>
             <th>User</th>
           </tr>
@@ -63,8 +63,8 @@
               <td><%= version.event %></td>
               <td><%= time_ago_in_words(version.inserted_at) %></td>
               <td><%= version.item_changes["prompt"] %></td>
-              <td><%= version.item_changes["lie"] %></td>
               <td><%= version.item_changes["truth"] %></td>
+              <td><%= version.item_changes["lie"] %></td>
               <td><%= link version.item_changes["category_id"], to: Routes.admin_category_path(@conn, :show, version.item_changes["category_id"]) %></td>
               <td><%= version.originator_id %></td>
             </tr>
