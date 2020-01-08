@@ -19,6 +19,7 @@ defmodule Quackbox.Content do
   """
   def list_questions do
     Repo.all(Question)
+    |> Repo.preload([:category])
   end
 
   @doc """
@@ -35,7 +36,10 @@ defmodule Quackbox.Content do
       ** (Ecto.NoResultsError)
 
   """
-  def get_question!(id), do: Repo.get!(Question, id)
+  def get_question!(id) do 
+    Repo.get!(Question, id)
+    |> Repo.preload([:category])
+  end
 
   @doc """
   Creates a question.
@@ -49,10 +53,10 @@ defmodule Quackbox.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_question(attrs \\ %{}, user_id) do
+  def create_question(attrs \\ %{}, user) do
     %Question{}
     |> Question.changeset(attrs)
-    |> PaperTrail.insert(originator_id: user_id)
+    |> PaperTrail.insert(originator: user)
   end
 
   @doc """
@@ -67,10 +71,10 @@ defmodule Quackbox.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_question(%Question{} = question, attrs, user_id) do
+  def update_question(%Question{} = question, attrs, user) do
     question
     |> Question.changeset(attrs)
-    |> PaperTrail.update(originator_id: user_id)
+    |> PaperTrail.update(originator: user)
   end
 
   @doc """
@@ -85,8 +89,8 @@ defmodule Quackbox.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_question(%Question{} = question, user_id) do
-    PaperTrail.delete(question, originator_id: user_id)
+  def delete_question(%Question{} = question, user) do
+    PaperTrail.delete(question, originator: user)
   end
 
   @doc """
@@ -99,7 +103,15 @@ defmodule Quackbox.Content do
 
   """
   def change_question(%Question{} = question) do
-    Question.changeset(question, %{})
+    preloaded = Repo.preload(question, [:category])
+
+    question
+    |> Question.changeset(%{"category_name" => preloaded.category.name})
+  end
+
+  def new_question(%Question{} = question) do
+    question
+    |> Question.changeset(%{})
   end
 
   alias Quackbox.Content.Category
@@ -114,7 +126,12 @@ defmodule Quackbox.Content do
 
   """
   def list_categories do
-    Repo.all(Category)
+    query = from c in Category,
+      left_join: q in assoc(c, :questions),
+      group_by: c.id,
+      select_merge: %{question_count: count(q.id)}
+
+    Repo.all(query)
   end
 
   @doc """
@@ -131,7 +148,18 @@ defmodule Quackbox.Content do
       ** (Ecto.NoResultsError)
 
   """
-  def get_category!(id), do: Repo.get!(Category, id)
+  def get_category!(id) do
+    Repo.get!(Category, id)
+    |> Repo.preload([:questions])
+  end
+
+  def get_or_insert_category!(name) do
+    Repo.insert!(
+      %Category{name: name},
+      on_conflict: [set: [name: name]],
+      conflict_target: :name
+    )
+  end
 
   @doc """
   Creates a category.
@@ -145,10 +173,10 @@ defmodule Quackbox.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_category(attrs \\ %{}, user_id) do
+  def create_category(attrs \\ %{}, user) do
     %Category{}
     |> Category.changeset(attrs)
-    |> PaperTrail.insert(originator_id: user_id)
+    |> PaperTrail.insert(originator: user)
   end
 
   @doc """
@@ -163,10 +191,10 @@ defmodule Quackbox.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_category(%Category{} = category, attrs, user_id) do
+  def update_category(%Category{} = category, attrs, user) do
     category
     |> Category.changeset(attrs)
-    |> PaperTrail.update(originator_id: user_id)
+    |> PaperTrail.update(originator: user)
   end
 
   @doc """
@@ -181,8 +209,8 @@ defmodule Quackbox.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_category(%Category{} = category, user_id) do
-    Repo.delete(category, originator_id: user_id)
+  def delete_category(%Category{} = category, user) do
+    Repo.delete(category, originator: user)
   end
 
   @doc """

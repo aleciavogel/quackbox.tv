@@ -10,14 +10,14 @@ defmodule QuackboxWeb.Admin.QuestionController do
   end
 
   def new(conn, _params) do
-    changeset = Content.change_question(%Question{})
+    changeset = Content.new_question(%Question{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"question" => question_params}) do
-    user_id = Pow.Plug.current_user(conn).id
+    user = Pow.Plug.current_user(conn)
 
-    case Content.create_question(question_params, user_id) do
+    case Content.create_question(question_params, user) do
       {:ok, %{:model => %Question{} = question}} ->
         conn
         |> put_flash(:info, "Question created successfully.")
@@ -30,7 +30,8 @@ defmodule QuackboxWeb.Admin.QuestionController do
 
   def show(conn, %{"id" => id}) do
     question = Content.get_question!(id)
-    render(conn, "show.html", question: question)
+    versions = PaperTrail.get_versions(question)
+    render(conn, "show.html", question: question, versions: versions)
   end
 
   def edit(conn, %{"id" => id}) do
@@ -41,9 +42,9 @@ defmodule QuackboxWeb.Admin.QuestionController do
 
   def update(conn, %{"id" => id, "question" => question_params}) do
     question = Content.get_question!(id)
-    user_id = Pow.Plug.current_user(conn).id
+    user = Pow.Plug.current_user(conn)
 
-    case Content.update_question(question, question_params, user_id) do
+    case Content.update_question(question, question_params, user) do
       {:ok, %{:model => %Question{} = question}} ->
         conn
         |> put_flash(:info, "Question updated successfully.")
@@ -56,9 +57,9 @@ defmodule QuackboxWeb.Admin.QuestionController do
 
   def delete(conn, %{"id" => id}) do
     question = Content.get_question!(id)
-    user_id = Pow.Plug.current_user(conn).id
+    user = Pow.Plug.current_user(conn)
 
-    {:ok, _question} = Content.delete_question(question, user_id)
+    {:ok, _question} = Content.delete_question(question, user)
 
     conn
     |> put_flash(:info, "Question deleted successfully.")

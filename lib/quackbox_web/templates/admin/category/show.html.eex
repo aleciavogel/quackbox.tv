@@ -1,13 +1,39 @@
-<h1>Show Category</h1>
+<section class="container">
+  <div class="row mb-4">
+    <div class="col-sm">
+      <%= link "Back", to: Routes.admin_category_path(@conn, :index), class: "btn btn-outline-secondary" %>
+    </div>
+    <div class="col-sm">
+      <%= link "Delete", to: Routes.admin_category_path(@conn, :delete, @category), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger float-right ml-3" %>
+      <%= link "Edit Category", to: Routes.admin_category_path(@conn, :edit, @category), class: "btn btn-primary float-right" %>
+    </div>
+  </div>
 
-<ul>
-
-  <li>
-    <strong>Name:</strong>
+  <p class="lead text-muted mb-0">Category</p>
+  <h1 class="display-4 mb-4">
     <%= @category.name %>
-  </li>
+  </h1>
 
-</ul>
+  <h4>
+    Questions
+  </h4>
 
-<span><%= link "Edit", to: Routes.admin_category_path(@conn, :edit, @category) %></span>
-<span><%= link "Back", to: Routes.admin_category_path(@conn, :index) %></span>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Prompt</th>
+        <th>Truth</th>
+        <th>Our Lie</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for question <- @category.questions do %>
+        <tr>
+          <td><%= question.prompt %></td>
+          <td><%= question.truth %></td>
+          <td><%= question.lie %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>

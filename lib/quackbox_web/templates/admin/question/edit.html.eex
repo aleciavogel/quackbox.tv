@@ -1,5 +1,10 @@
-<h1>Edit Question</h1>
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-sm">
+      <%= link "Back", to: Routes.admin_question_path(@conn, :index), class: "btn btn-outline-secondary" %>
+    </div>
+  </div>
+  <h1>Edit Question</h1>
 
-<%= render "form.html", Map.put(assigns, :action, Routes.admin_question_path(@conn, :update, @question)) %>
-
-<span><%= link "Back", to: Routes.admin_question_path(@conn, :index) %></span>
+  <%= render "form.html", Map.put(assigns, :action, Routes.admin_question_path(@conn, :update, @question)) %>
+</div>

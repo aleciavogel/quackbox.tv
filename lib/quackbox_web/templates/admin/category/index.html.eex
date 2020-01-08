@@ -1,26 +1,39 @@
-<h1>Listing Categories</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <h1>Categories</h1>
+    </div>
+    <div class="col-sm">
+      <%= link "New Category", to: Routes.admin_category_path(@conn, :new), class: "btn btn-primary float-right" %>
+    </div>
+  </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
+  <div class="row">
+    <div class="col-sm">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th># Questions</th>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for category <- @categories do %>
-    <tr>
-      <td><%= category.name %></td>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for category <- @categories do %>
+              <tr>
+                <td><%= category.name %></td>
+                <td><%= category.question_count %></td>
 
-      <td>
-        <span><%= link "Show", to: Routes.admin_category_path(@conn, :show, category) %></span>
-        <span><%= link "Edit", to: Routes.admin_category_path(@conn, :edit, category) %></span>
-        <span><%= link "Delete", to: Routes.admin_category_path(@conn, :delete, category), method: :delete, data: [confirm: "Are you sure?"] %></span>
-      </td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
-
-<span><%= link "New Category", to: Routes.admin_category_path(@conn, :new) %></span>
+                <td>
+                  <span><%= link "View", to: Routes.admin_category_path(@conn, :show, category) %></span>
+                  <span><%= link "Edit", to: Routes.admin_category_path(@conn, :edit, category) %></span>
+                  <span><%= link "Delete", to: Routes.admin_category_path(@conn, :delete, category), method: :delete, data: [confirm: "Are you sure?"] %></span>
+                </td>
+              </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

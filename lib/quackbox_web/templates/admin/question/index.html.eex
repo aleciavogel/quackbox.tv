@@ -1,30 +1,46 @@
-<h1>Listing Questions</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <h1>
+        Questions 
+      </h1>
+    </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Prompt</th>
-      <th>Truth</th>
-      <th>Lie</th>
+    <div class="col-sm">
+      <%= link "New Question", to: Routes.admin_question_path(@conn, :new), class: "btn btn-primary float-right" %>
+    </div>
+  </div>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for question <- @questions do %>
-    <tr>
-      <td><%= question.prompt %></td>
-      <td><%= question.truth %></td>
-      <td><%= question.lie %></td>
+  <div class="row">
+    <div class="col-sm">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Prompt</th>
+            <th>Truth</th>
+            <th>Lie</th>
+            <th>Category</th>
 
-      <td>
-        <span><%= link "Show", to: Routes.admin_question_path(@conn, :show, question) %></span>
-        <span><%= link "Edit", to: Routes.admin_question_path(@conn, :edit, question) %></span>
-        <span><%= link "Delete", to: Routes.admin_question_path(@conn, :delete, question), method: :delete, data: [confirm: "Are you sure?"] %></span>
-      </td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for question <- @questions do %>
+            <tr>
+              <td><%= question.prompt %></td>
+              <td><%= question.truth %></td>
+              <td><%= question.lie %></td>
+              <td><%= question.category.name %></td>
 
-<span><%= link "New Question", to: Routes.admin_question_path(@conn, :new) %></span>
+              <td>
+                <span><%= link "View", to: Routes.admin_question_path(@conn, :show, question) %></span>
+                <span><%= link "Edit", to: Routes.admin_question_path(@conn, :edit, question) %></span>
+                <span><%= link "Delete", to: Routes.admin_question_path(@conn, :delete, question), method: :delete, data: [confirm: "Are you sure?"] %></span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

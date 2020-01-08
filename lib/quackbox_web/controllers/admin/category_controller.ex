@@ -15,9 +15,9 @@ defmodule QuackboxWeb.Admin.CategoryController do
   end
 
   def create(conn, %{"category" => category_params}) do
-    user_id = Pow.Plug.current_user(conn).id
+    user = Pow.Plug.current_user(conn)
 
-    case Content.create_category(category_params, user_id) do
+    case Content.create_category(category_params, user) do
       {:ok, %{:model => %Category{} = category}} ->
         conn
         |> put_flash(:info, "Category created successfully.")
@@ -41,9 +41,9 @@ defmodule QuackboxWeb.Admin.CategoryController do
 
   def update(conn, %{"id" => id, "category" => category_params}) do
     category = Content.get_category!(id)
-    user_id = Pow.Plug.current_user(conn).id
+    user = Pow.Plug.current_user(conn)
 
-    case Content.update_category(category, category_params, user_id) do
+    case Content.update_category(category, category_params, user) do
       {:ok, %{:model => %Category{} = category}} ->
         conn
         |> put_flash(:info, "Category updated successfully.")
@@ -56,9 +56,9 @@ defmodule QuackboxWeb.Admin.CategoryController do
 
   def delete(conn, %{"id" => id}) do
     category = Content.get_category!(id)
-    user_id = Pow.Plug.current_user(conn).id
+    user = Pow.Plug.current_user(conn)
 
-    {:ok, _category} = Content.delete_category(category, user_id)
+    {:ok, _category} = Content.delete_category(category, user)
 
     conn
     |> put_flash(:info, "Category deleted successfully.")

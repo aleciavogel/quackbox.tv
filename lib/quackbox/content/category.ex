@@ -6,6 +6,8 @@ defmodule Quackbox.Content.Category do
 
   schema "categories" do
     field :name, :string
+    
+    field :question_count, :integer, virtual: true
 
     has_many :questions, Question
 

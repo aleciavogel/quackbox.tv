@@ -1,23 +1,70 @@
-<h1>Show Question</h1>
+<section class="container">
 
-<ul>
+  <div class="row mb-4">
+    <div class="col-sm">
+      <%= link "Back", to: Routes.admin_question_path(@conn, :index), class: "btn btn-outline-secondary" %>
+    </div>
+    <div class="col-sm">
+      <%= link "Delete", to: Routes.admin_question_path(@conn, :delete, @question), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger float-right ml-3" %>
+      <%= link "Edit Question", to: Routes.admin_question_path(@conn, :edit, @question), class: "btn btn-primary float-right" %>
+    </div>
+  </div>
 
-  <li>
-    <strong>Prompt:</strong>
-    <%= @question.prompt %>
-  </li>
+  <div class="row">
+    <div class="col">
+      <p class="lead text-muted mb-0">
+        Question
+      </p>
+      <h1 class="display-4">
+        "<%= @question.prompt %>"
+      </h1>
+    </div>
+  </div>
 
-  <li>
-    <strong>Truth:</strong>
-    <%= @question.truth %>
-  </li>
+  <div class="row">
+    <div class="col">
+      <ul>
+        <li>
+          <strong>Truth:</strong>
+          <%= @question.truth %>
+        </li>
 
-  <li>
-    <strong>Lie:</strong>
-    <%= @question.lie %>
-  </li>
+        <li>
+          <strong>Our Lie:</strong>
+          <%= @question.lie %>
+        </li>
 
-</ul>
+        <li>
+          <strong>Category:</strong>
+          <%= @question.category.name %>
+        </li>
+      </ul>
+    </div>
+  </div>
 
-<span><%= link "Edit", to: Routes.admin_question_path(@conn, :edit, @question) %></span>
-<span><%= link "Back", to: Routes.admin_question_path(@conn, :index) %></span>
+  <div class="row mt-5">
+    <div class="col">
+      <h4>
+        History
+      </h4>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Date & Time</th>
+            <th>User</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for version <- @versions do %>
+            <tr>
+              <td><%= version.event %></td>
+              <td><%= version.inserted_at %></td>
+              <td><%= version.originator_id %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
