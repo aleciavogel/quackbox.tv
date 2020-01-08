@@ -1,7 +1,7 @@
 <section class="container">
   <div class="row mb-4">
     <div class="col-sm">
-      <%= link "Back", to: Routes.admin_category_path(@conn, :index), class: "btn btn-outline-secondary" %>
+      <%= link "Back to Categories", to: Routes.admin_category_path(@conn, :index), class: "btn btn-outline-secondary" %>
     </div>
     <div class="col-sm">
       <%= link "Delete", to: Routes.admin_category_path(@conn, :delete, @category), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger float-right ml-3" %>

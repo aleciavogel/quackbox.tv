@@ -2,7 +2,7 @@
 
   <div class="row mb-4">
     <div class="col-sm">
-      <%= link "Back", to: Routes.admin_question_path(@conn, :index), class: "btn btn-outline-secondary" %>
+      <%= link "Back to Questions", to: Routes.admin_question_path(@conn, :index), class: "btn btn-outline-secondary" %>
     </div>
     <div class="col-sm">
       <%= link "Delete", to: Routes.admin_question_path(@conn, :delete, @question), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger float-right ml-3" %>
@@ -50,6 +50,10 @@
           <tr>
             <th>Event</th>
             <th>When</th>
+            <th>Prompt</th>
+            <th>Lie</th>
+            <th>Truth</th>
+            <th>Category</th>
             <th>User</th>
           </tr>
         </thead>
@@ -58,6 +62,10 @@
             <tr>
               <td><%= version.event %></td>
               <td><%= time_ago_in_words(version.inserted_at) %></td>
+              <td><%= version.item_changes["prompt"] %></td>
+              <td><%= version.item_changes["lie"] %></td>
+              <td><%= version.item_changes["truth"] %></td>
+              <td><%= link version.item_changes["category_id"], to: Routes.admin_category_path(@conn, :show, version.item_changes["category_id"]) %></td>
               <td><%= version.originator_id %></td>
             </tr>
           <% end %>

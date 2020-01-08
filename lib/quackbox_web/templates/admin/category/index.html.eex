@@ -23,14 +23,17 @@
         <tbody>
           <%= for category <- @categories do %>
               <tr>
-                <td><%= category.name %></td>
+                <td><%= link category.name, to: Routes.admin_category_path(@conn, :show, category) %></td>
                 <td><%= category.question_count %></td>
                 <td><%= time_ago_in_words(category.inserted_at) %></td>
 
                 <td>
-                  <span><%= link "View", to: Routes.admin_category_path(@conn, :show, category) %></span>
-                  <span><%= link "Edit", to: Routes.admin_category_path(@conn, :edit, category) %></span>
-                  <span><%= link "Delete", to: Routes.admin_category_path(@conn, :delete, category), method: :delete, data: [confirm: "Are you sure?"] %></span>
+                  <span>
+                    <%= link "Edit", to: Routes.admin_category_path(@conn, :edit, category) %>
+                  </span>
+                  <span class="ml-3">
+                    <%= link "Delete", to: Routes.admin_category_path(@conn, :delete, category), method: :delete, data: [confirm: "Are you sure?"] %>
+                  </span>
                 </td>
               </tr>
           <% end %>
