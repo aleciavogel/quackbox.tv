@@ -1,6 +1,7 @@
 defmodule QuackboxWeb.Admin.QuestionController do
   use QuackboxWeb, :controller
 
+  alias Quackbox.Repo
   alias Quackbox.Content
   alias Quackbox.Content.Question
 
@@ -30,7 +31,10 @@ defmodule QuackboxWeb.Admin.QuestionController do
 
   def show(conn, %{"id" => id}) do
     question = Content.get_question!(id)
-    versions = PaperTrail.get_versions(question)
+    versions = 
+      PaperTrail.get_versions(question)
+      |> Repo.preload(:user)
+      
     render(conn, "show.html", question: question, versions: versions)
   end
 

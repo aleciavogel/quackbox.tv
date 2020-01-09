@@ -154,9 +154,13 @@ defmodule Quackbox.Content do
   end
 
   def get_or_insert_category!(name) do
+    downcased_name =
+      name
+      |> String.downcase()
+
     Repo.insert!(
-      %Category{name: name},
-      on_conflict: [set: [name: name]],
+      %Category{name: downcased_name},
+      on_conflict: [set: [name: downcased_name]],
       conflict_target: :name
     )
   end
