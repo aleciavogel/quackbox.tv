@@ -13,7 +13,8 @@ defmodule QuackboxWeb.RoomChannel do
     if player.room.access_code === access_code do
       player_info = %{
         name: player.name,
-        id: player.id
+        id: player.id,
+        is_lead: Presence.list(socket) |> Enum.empty?
       }
       response = %{
         player: player_info
