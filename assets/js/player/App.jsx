@@ -1,35 +1,32 @@
-import React, { Component } from 'react'
-import { Socket } from 'phoenix'
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-export default class App extends Component {
+import { joinRoom } from "./actions";
+
+class App extends Component {
   componentDidMount() {
-    let socket = new Socket(
-      "/socket", 
-      {
-        params: {
-          player_token: window.playerToken,
-          access_code: window.roomID
-        }
-      }
-    )
-
-    socket.connect()
-
-    let room_id = window.roomID
-    let channel = socket.channel(`room:${room_id}`, {})
-
-    channel.join()
-      .receive('ok', response => {
-        console.log("Joined successfully", response)
-      })
-      .receive('error', response => {
-        console.log("Unable to join.", response)
-      })
+    const { dispatch, socket, room_id } = this.props;
+    socket.connect();
+    dispatch(joinRoom(socket, room_id));
   }
 
   render() {
-    return (
-      <h1>Welcome to the player component</h1>
-    )
+    const { loading } = this.props;
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+    return <div>Player App</div>;
   }
 }
+
+function mapStateToProps(state) {
+  const { loading } = state;
+
+  return {
+    loading
+  };
+}
+
+export default connect(mapStateToProps)(App);
