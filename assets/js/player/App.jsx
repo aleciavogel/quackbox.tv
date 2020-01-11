@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import { joinRoom } from "./actions";
+import GameStart from "./scenes/GameStart";
 
 class App extends Component {
   componentDidMount() {
@@ -17,7 +18,7 @@ class App extends Component {
       return <div>Loading...</div>;
     }
 
-    return <div>Player App</div>;
+    return <GameStart />;
   }
 }
 
