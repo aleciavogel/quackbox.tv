@@ -68,9 +68,14 @@ defmodule QuackboxWeb.RoomChannel do
   end
 
   # Lead player starts the game
-  def handle_in("start_game", _params, %{assigns: %{current_player_id: _player_id}} = socket) do
+  def handle_in("start_game", _params, %{assigns: %{current_player_id: _player_id, room_id: room_id}} = socket) do
+    Room
+    |> Repo.get(room_id)
+    |> Room.changeset(%{current_scene: "select-category"})
+    |> Repo.update
+
     response = %{
-      scene: "select-category",
+      scene: "select-category"
     }
 
     send(self(), {:after_start_game, response})
