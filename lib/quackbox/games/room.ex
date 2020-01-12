@@ -29,9 +29,9 @@ defmodule Quackbox.Games.Room do
   @valid_scenes ~w(game-start select-category answering voting leaderboard game-end)
   def changeset(room, attrs) do
     room
-    |> cast(attrs, [:game_id, :user_id, :max_players])
-    |> validate_required([:game_id, :user_id, :max_players])
-    |> generate_access_code()
+    |> cast(attrs, @valid_fields)
+    |> validate_required(@required_fields)
+    |> validate_inclusion(:current_scene, @valid_scenes)
   end
 
   def new_changeset(room, attrs) do
