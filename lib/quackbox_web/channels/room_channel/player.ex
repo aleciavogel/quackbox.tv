@@ -4,6 +4,7 @@ defmodule QuackboxWeb.RoomChannel.Player do
 
   alias Quackbox.Repo
   alias Quackbox.Games.{Player}
+  alias Quackbox.Content
   alias QuackboxWeb.Presence
 
   def join(access_code, player_id, socket) do
@@ -19,7 +20,9 @@ defmodule QuackboxWeb.RoomChannel.Player do
       }
       response = %{
         player: player_info,
-        scene: player.room.current_scene
+        scene: player.room.current_scene,
+        is_choosing: player.id == player.room.chooser_id,
+        categories: player.room.category_choices || []
       }
       send(self(), {:after_player_join, player_info})
       {:ok, response, assign(socket, :room_id, player.room.id)}
@@ -43,10 +46,12 @@ defmodule QuackboxWeb.RoomChannel.Player do
   # Player starts the game
   def start_game(_params, %{assigns: %{current_player_id: _player_id}} = socket) do
     chooser = set_chooser(socket)
+    categories = set_choices(socket)
 
     response = %{
       scene: "select-category",
-      chooser: chooser
+      chooser: chooser,
+      categories: categories
     }
 
     send(self(), {:after_start_game, response})
@@ -71,6 +76,17 @@ defmodule QuackboxWeb.RoomChannel.Player do
     |> Repo.update
 
     chooser
+  end
+
+  defp set_choices(%{assigns: %{room_id: room_id}}) do
+    categories = Content.pick_random_categories
+
+    Room
+    |> Repo.get(room_id)
+    |> Room.changeset(%{category_choices: categories})
+    |> Repo.update
+
+    categories
   end
 
   # Returns a random presence
