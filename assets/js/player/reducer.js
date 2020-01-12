@@ -8,7 +8,8 @@ const initialState = {
     is_lead: null
   },
   error: null,
-  loading: true
+  loading: true,
+  scene: "game-start"
 };
 
 const reducer = (state = initialState, action = {}) => {
