@@ -11,7 +11,8 @@ const initialState = {
   channel: null,
   error: null,
   loading: true,
-  lead_player_id: null
+  lead_player_id: null,
+  scene: "game-start"
 }
 
 const reducer = (state = initialState, action = {}) => {
