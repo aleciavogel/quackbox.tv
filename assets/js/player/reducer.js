@@ -9,7 +9,9 @@ const initialState = {
   },
   error: null,
   loading: true,
-  scene: "game-start"
+  scene: "game-start",
+  categories: [],
+  is_choosing: false
 };
 
 const reducer = (state = initialState, action = {}) => {
@@ -21,6 +23,8 @@ const reducer = (state = initialState, action = {}) => {
         channel: action.channel,
         player: action.player,
         scene: action.scene,
+        is_choosing: action.is_choosing,
+        categories: action.categories,
         error: null,
         loading: false
       };
@@ -33,7 +37,9 @@ const reducer = (state = initialState, action = {}) => {
     case CATEGORY_SELECT:
       return {
         ...state,
-        scene: action.scene
+        scene: action.scene,
+        is_choosing: action.is_choosing,
+        categories: action.categories
       };
     default:
       return state;

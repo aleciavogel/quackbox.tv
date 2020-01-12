@@ -15,15 +15,17 @@ export const joinRoom = (socket, room_id) => {
 
     channel
       .join()
-      .receive("ok", ({ player, scene }) => {
+      .receive("ok", ({ player, scene, is_choosing, categories }) => {
         dispatch({
           type: JOIN_ROOM,
           room: room_id,
           channel,
           player,
-          scene
+          scene,
+          is_choosing,
+          categories
         });
-        setupGameEvents(channel, dispatch);
+        setupGameEvents(channel, dispatch, player.id);
       })
       .receive("error", ({ reason }) => {
         dispatch({
@@ -42,11 +44,15 @@ export const startGame = channel => {
   };
 };
 
-const setupGameEvents = (channel, dispatch) => {
-  channel.on("category_select", ({ scene }) => {
+const setupGameEvents = (channel, dispatch, player_id) => {
+  channel.on("category_select", ({ scene, chooser, categories }) => {
+    const is_choosing = player_id == chooser.id
+
     dispatch({
       type: CATEGORY_SELECT,
-      scene
+      scene,
+      is_choosing,
+      categories
     });
   });
 };
