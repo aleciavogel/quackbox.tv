@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { joinRoom } from "./actions";
 import GameStart from "./scenes/GameStart";
 import Loading from "../common/Loading";
+import Switch from "../common/Switch";
 
 class App extends Component {
   componentDidMount() {
@@ -19,7 +20,16 @@ class App extends Component {
       return <Loading />;
     }
 
-    return <GameStart />;
+    return (
+      <Switch>
+        <GameStart scene="game-start" />
+        {/* select-category */}
+        {/* answering */}
+        {/* voting */}
+        {/* leaderboard */}
+        {/* game-end */}
+      </Switch>
+    );
   }
 }
 
