@@ -14,7 +14,7 @@ export const joinRoom = (socket, room_id) => {
     let presences = {}
 
     channel.join()
-      .receive('ok', ({ scene, ...response }) => {
+      .receive('ok', ({ scene, chooser, categories, ...response }) => {
         const { players, audience_members } = sortPresentUsers(response.presences)
 
         dispatch({
@@ -23,7 +23,9 @@ export const joinRoom = (socket, room_id) => {
           players,
           audience_members,
           channel,
-          scene
+          scene,
+          chooser,
+          categories
         })
 
         setupPresenceEvents(channel, dispatch, presences)
@@ -51,10 +53,12 @@ const setupPresenceEvents = (channel, dispatch, presences) => {
 }
 
 const setupGameEvents = (channel, dispatch) => {
-  channel.on('category_select', ({ scene }) => {
+  channel.on('category_select', ({ scene, chooser, categories }) => {
     dispatch({
       type: CATEGORY_SELECT,
       scene,
+      chooser,
+      categories
     });
   });
 }

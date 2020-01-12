@@ -12,7 +12,12 @@ const initialState = {
   channel: null,
   error: null,
   loading: true,
-  scene: "game-start"
+  scene: "game-start",
+  chooser: {
+    name: null,
+    id: null
+  },
+  categories: []
 }
 
 const reducer = (state = initialState, action = {}) => {
@@ -25,6 +30,8 @@ const reducer = (state = initialState, action = {}) => {
         players: action.players,
         audience_members: action.audience_members,
         scene: action.scene,
+        chooser: action.chooser,
+        categories: action.categories,
         error: null,
         loading: false
       }
@@ -44,7 +51,9 @@ const reducer = (state = initialState, action = {}) => {
     case CATEGORY_SELECT:
       return {
         ...state,
-        scene: action.scene
+        scene: action.scene,
+        chooser: action.chooser,
+        categories: action.categories
       }
     default:
       return state
