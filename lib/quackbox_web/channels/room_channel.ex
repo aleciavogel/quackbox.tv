@@ -23,43 +23,15 @@ defmodule QuackboxWeb.RoomChannel do
     do: {:error, %{reason: "Invalid session."}}
 
   # Lead player starts the game
-  def handle_in("start_game", _params, %{assigns: %{current_player_id: _player_id, room_id: room_id}} = socket) do
-    Room
-    |> Repo.get(room_id)
-    |> Room.changeset(%{current_scene: "select-category"})
-    |> Repo.update
+  def handle_in("start_game", _params, %{assigns: %{current_player_id: _player_id, room_id: room_id}} = socket), 
+    do: Player.start_game(room_id, socket)
 
-    response = %{
-      scene: "select-category"
-    }
+  def handle_info({:after_player_join, player}, socket),
+    do: Player.after_player_join(player, socket)
 
-    send(self(), {:after_start_game, response})
-    {:noreply, socket}
-  end
+  def handle_info({:after_audience_join, audience}, socket), 
+    do: Audience.after_audience_join(audience, socket)
 
-  def handle_info({:after_player_join, player}, socket) do
-    push(socket, "presence_state", Presence.list(socket))
-    {:ok, _} = Presence.track(socket, "player:#{player.id}", %{
-      name: player.name,
-      id: player.id,
-      online_at: inspect(System.system_time(:second)),
-      type: "player"
-    })
-    {:noreply, socket}
-  end
-
-  def handle_info({:after_audience_join, audience}, socket) do
-    push(socket, "presence_state", Presence.list(socket))
-    {:ok, _} = Presence.track(socket, "audience:#{audience.id}", %{
-      name: audience.name,
-      id: audience.id,
-      type: "audience"
-    })
-    {:noreply, socket}
-  end
-
-  def handle_info({:after_start_game, response}, socket) do
-    broadcast!(socket, "category_select", response)
-    {:noreply, socket}
-  end
+  def handle_info({:after_start_game, response}, socket), 
+    do: Player.after_start_game(response, socket)
 end

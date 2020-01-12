@@ -27,4 +27,37 @@ defmodule QuackboxWeb.RoomChannel.Player do
       {:error, %{reason: "Invalid session."}}
     end
   end
+
+  # After a player joins the game, track their Presence
+  def after_player_join(player, socket) do
+    push(socket, "presence_state", Presence.list(socket))
+    {:ok, _} = Presence.track(socket, "player:#{player.id}", %{
+      name: player.name,
+      id: player.id,
+      online_at: inspect(System.system_time(:second)),
+      type: "player"
+    })
+    {:noreply, socket}
+  end
+
+  # Player starts the game
+  def start_game(room_id, socket) do
+    Room
+    |> Repo.get(room_id)
+    |> Room.changeset(%{current_scene: "select-category"})
+    |> Repo.update
+
+    response = %{
+      scene: "select-category"
+    }
+
+    send(self(), {:after_start_game, response})
+    {:noreply, socket}
+  end
+
+  # After player starts the game
+  def after_start_game(response, socket) do
+    broadcast!(socket, "category_select", response)
+    {:noreply, socket}
+  end
 end

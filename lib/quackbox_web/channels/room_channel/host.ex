@@ -9,12 +9,9 @@ defmodule QuackboxWeb.RoomChannel.Host do
   def join(access_code, socket) do
     case Games.get_room!(access_code) do
       [%Room{} = room] ->
-        presences = Presence.list(socket)
         response = %{
           scene: room.current_scene,
-          presences: presences,
-          chooser: fetch_chooser(room),
-          categories: room.category_choices
+          presences: Presence.list(socket)
         }
         {:ok, response, assign(socket, :room_id, room.id)}
       [] ->

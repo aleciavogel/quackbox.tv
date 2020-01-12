@@ -19,4 +19,14 @@ defmodule QuackboxWeb.RoomChannel.Audience do
       {:error, %{reason: "Invalid session."}}
     end
   end
+
+  def after_audience_join(audience, socket) do
+    push(socket, "presence_state", Presence.list(socket))
+    {:ok, _} = Presence.track(socket, "audience:#{audience.id}", %{
+      name: audience.name,
+      id: audience.id,
+      type: "audience"
+    })
+    {:noreply, socket}
+  end
 end
