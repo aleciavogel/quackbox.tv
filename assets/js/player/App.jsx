@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 import { joinRoom } from "./actions";
 import GameStart from "./scenes/GameStart";
+import SelectCategory from "./scenes/SelectCategory";
 import Loading from "../common/Loading";
 import Switch from "../common/Switch";
 
@@ -23,7 +24,7 @@ class App extends Component {
     return (
       <Switch>
         <GameStart scene="game-start" />
-        {/* TODO: select-category */}
+        <SelectCategory scene="select-category" />
         {/* TODO: answering */}
         {/* TODO: voting */}
         {/* TODO: leaderboard */}
