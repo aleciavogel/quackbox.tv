@@ -23,11 +23,11 @@ class App extends Component {
     return (
       <Switch>
         <GameStart scene="game-start" />
-        {/* select-category */}
-        {/* answering */}
-        {/* voting */}
-        {/* leaderboard */}
-        {/* game-end */}
+        {/* TODO: select-category */}
+        {/* TODO: answering */}
+        {/* TODO: voting */}
+        {/* TODO: leaderboard */}
+        {/* TODO: game-end */}
       </Switch>
     );
   }
