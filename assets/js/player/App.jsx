@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 import { joinRoom } from "./actions";
 import GameStart from "./scenes/GameStart";
+import Loading from "../common/Loading";
 
 class App extends Component {
   componentDidMount() {
@@ -15,7 +16,7 @@ class App extends Component {
     const { loading } = this.props;
 
     if (loading) {
-      return <div>Loading...</div>;
+      return <Loading />;
     }
 
     return <GameStart />;

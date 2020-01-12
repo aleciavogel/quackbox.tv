@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 
 import configureStore from "./player/store";
 import PlayerApp from "./player/App";
+import Layout from "./common/Layout";
 
 const store = configureStore();
 const token = window.playerToken;
@@ -21,7 +22,9 @@ let socket = new Socket("/socket", {
 
 ReactDOM.render(
   <Provider store={store}>
-    <PlayerApp socket={socket} room_id={room_id} />
+    <Layout>
+      <PlayerApp socket={socket} room_id={room_id} />
+    </Layout>
   </Provider>,
   document.getElementById("app")
 );
