@@ -41,7 +41,7 @@ defmodule QuackboxWeb.RoomChannel.Player do
   end
 
   # Player starts the game
-  def start_game(room_id, socket) do
+  def start_game(_params, %{assigns: %{current_player_id: _player_id, room_id: room_id}} = socket) do
     Room
     |> Repo.get(room_id)
     |> Room.changeset(%{current_scene: "select-category"})

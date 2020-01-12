@@ -2,6 +2,7 @@ defmodule QuackboxWeb.RoomChannel.Audience do
   import Phoenix.Channel, only: [push: 3]
 
   alias Quackbox.Repo
+  alias QuackboxWeb.Presence
 
   def join(access_code, audience_id, socket) do
     audience = 

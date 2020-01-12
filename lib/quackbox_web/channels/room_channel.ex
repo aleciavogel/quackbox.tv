@@ -1,5 +1,6 @@
 defmodule QuackboxWeb.RoomChannel do
   use QuackboxWeb, :channel
+  import QuackboxWeb.RoomChannel.MessagesHandler
   alias QuackboxWeb.RoomChannel.{Host, Audience, Player}
 
   # Player joins the game
@@ -18,16 +19,16 @@ defmodule QuackboxWeb.RoomChannel do
   def join(_room, _params, _socket), 
     do: {:error, %{reason: "Invalid session."}}
 
-  # Lead player starts the game
-  def handle_in("start_game", _params, %{assigns: %{current_player_id: _player_id, room_id: room_id}} = socket), 
-    do: Player.start_game(room_id, socket)
+  handle_incoming [
+    :start_game
+  ], with_module: Player
 
-  def handle_info({:after_player_join, player}, socket),
-    do: Player.after_player_join(player, socket)
+  handle_broadcasts [
+    :after_player_join,
+    :after_start_game
+  ], with_module: Player
 
-  def handle_info({:after_audience_join, audience}, socket), 
-    do: Audience.after_audience_join(audience, socket)
-
-  def handle_info({:after_start_game, response}, socket), 
-    do: Player.after_start_game(response, socket)
+  handle_broadcasts [
+    :after_audience_join
+  ], with_module: Audience
 end
