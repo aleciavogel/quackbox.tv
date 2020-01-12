@@ -18,13 +18,13 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const PlayerListItem = ({ name, is_lead }) => {
+const PlayerListItem = ({ player }) => {
   const classes = useStyles()
 
   return (
     <Paper variant="outlined" className={classes.root}>
       <Typography variant="h4">
-        {name} {is_lead && (
+        {player.name} {player.is_lead && (
           <FlagIcon className={classes.icon} />
         )}
       </Typography>

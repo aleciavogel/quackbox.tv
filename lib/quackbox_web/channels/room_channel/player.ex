@@ -3,7 +3,7 @@ defmodule QuackboxWeb.RoomChannel.Player do
   import Phoenix.Socket, only: [assign: 3]
 
   alias Quackbox.Repo
-  alias Quackbox.Games.{Player}
+  alias Quackbox.Games.{Player, Room}
   alias Quackbox.Content
   alias QuackboxWeb.Presence
 
@@ -37,6 +37,7 @@ defmodule QuackboxWeb.RoomChannel.Player do
     {:ok, _} = Presence.track(socket, "player:#{player.id}", %{
       name: player.name,
       id: player.id,
+      is_lead: player.is_lead,
       online_at: inspect(System.system_time(:second)),
       type: "player"
     })

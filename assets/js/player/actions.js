@@ -7,6 +7,7 @@ export const CATEGORY_SELECT = "CATEGORY_SELECT";
 
 // Player events
 export const START_GAME = "START_GAME";
+export const SELECT_CATEGORY = "SELECT_CATEGORY";
 
 // Initialize event listeners
 export const joinRoom = (socket, room_id) => {
@@ -35,6 +36,14 @@ export const joinRoom = (socket, room_id) => {
       });
   };
 };
+
+export const selectCategory = (channel, category) => {
+  channel.push('select_category', {category})
+
+  return {
+    type: SELECT_CATEGORY
+  }
+}
 
 export const startGame = channel => {
   channel.push("start_game", {});

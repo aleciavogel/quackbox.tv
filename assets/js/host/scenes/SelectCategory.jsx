@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-import { Category } from "../components/SelectCategory";
+import Category from "../components/SelectCategory/Category";
 
 const useStyles = makeStyles(theme => ({
   centerText: {

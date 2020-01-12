@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 const PlayerList = ({ players, lead_player_id }) => {
   const classes = useStyles()
   const player_items = players.map((player) => (
-    <PlayerListItem name={player.name} key={player.id} is_lead={lead_player_id == player.id} />
+    <PlayerListItem player={player} key={player.id} />
   ))
 
   return (
