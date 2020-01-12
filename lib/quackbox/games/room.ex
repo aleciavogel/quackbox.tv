@@ -11,6 +11,9 @@ defmodule Quackbox.Games.Room do
     field :access_code, :string
     field :max_players, :integer
     field :finished_at, :date
+    field :current_scene, :string, default: "game-start"
+    field :chooser_id, :integer
+    field :category_choices, {:array, :string}, default: []
 
     belongs_to :game, Game
     belongs_to :user, User
@@ -21,10 +24,19 @@ defmodule Quackbox.Games.Room do
   end
 
   @doc false
+  @required_fields [:game_id, :user_id, :max_players]
+  @valid_fields [:game_id, :user_id, :max_players, :current_scene, :chooser_id, :category_choices]
+  @valid_scenes ~w(game-start select-category answering voting leaderboard game-end)
   def changeset(room, attrs) do
     room
     |> cast(attrs, [:game_id, :user_id, :max_players])
     |> validate_required([:game_id, :user_id, :max_players])
+    |> generate_access_code()
+  end
+
+  def new_changeset(room, attrs) do
+    room
+    |> changeset(attrs)
     |> generate_access_code()
   end
 
