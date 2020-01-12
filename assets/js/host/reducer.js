@@ -33,7 +33,6 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         players: action.players,
         audience_members: action.audience_members,
-        lead_player_id: action.lead_player_id,
         error: null
       }
     case RECEIVE_ERROR:
