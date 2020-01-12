@@ -1,9 +1,5 @@
 defmodule QuackboxWeb.RoomChannel do
   use QuackboxWeb, :channel
-  alias Quackbox.Repo
-  alias Quackbox.Games
-  alias Quackbox.Games.{Player, AudienceMember, Room}
-  alias QuackboxWeb.Presence
   alias QuackboxWeb.RoomChannel.{Host, Audience, Player}
 
   # Player joins the game
