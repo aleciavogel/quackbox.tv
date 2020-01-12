@@ -145,6 +145,22 @@ defmodule Quackbox.Games do
     Repo.all(query)
   end
 
+  # Allows us to display the name of the player who is
+  # choosing a category
+  def get_room_chooser!(chooser_id) do
+    Repo.get(Player, chooser_id)
+  end
+
+  # Retrieve a random player from the room. This is used
+  # to assign a player as the "chooser" for a round
+  def get_random_room_player!(room_id) do
+    query = from p in Player,
+      where: p.room_id == ^room_id,
+      order_by: fragment("RANDOM()")
+
+    Repo.one(query)
+  end
+
   @doc """
   Creates a room.
 
@@ -159,7 +175,7 @@ defmodule Quackbox.Games do
   """
   def create_room(attrs \\ %{}) do
     %Room{}
-    |> Room.changeset(attrs)
+    |> Room.new_changeset(attrs)
     |> Repo.insert()
   end
 

@@ -153,6 +153,13 @@ defmodule Quackbox.Content do
     |> Repo.preload([:questions])
   end
 
+  # Given a name, return a category
+  def get_category_by_name!(name) do
+    Category
+    |> Repo.get_by!(name: name)
+    |> Repo.preload([:questions])
+  end
+
   def get_or_insert_category!(name) do
     downcased_name =
       name
@@ -228,5 +235,27 @@ defmodule Quackbox.Content do
   """
   def change_category(%Category{} = category) do
     Category.changeset(category, %{})
+  end
+
+  # Pick 5 random categories and return an array of their names
+  def pick_random_categories() do
+    query =
+      from c in Category,
+      select: c.name,
+      order_by: fragment("RANDOM()"),
+      limit: 5
+
+    Repo.all(query)
+  end
+
+  # Pick one random question, given a category
+  def pick_random_category_question!(category) do
+    query =
+      from q in Question,
+      where: q.category_id == ^category.id,
+      select: [q.id, q.prompt],
+      order_by: fragment("RANDOM()")
+    
+    Repo.one(query)
   end
 end
