@@ -20,7 +20,7 @@ defmodule QuackboxWeb.RoomChannel do
         player: player_info
       }
       send(self(), {:after_player_join, player_info})
-      {:ok, response, socket}
+      {:ok, response, assign(socket, :room_id, room.id)}
     else
       {:error, %{reason: "Invalid session."}}
     end
@@ -54,6 +54,16 @@ defmodule QuackboxWeb.RoomChannel do
     {:error, %{reason: "Invalid session."}}
   end
 
+  # Lead player starts the game
+  def handle_in("start_game", _params, %{assigns: %{current_player_id: _player_id}} = socket) do
+    response = %{
+      scene: "select-category",
+    }
+
+    send(self(), {:after_start_game, response})
+    {:noreply, socket}
+  end
+
   def handle_info({:after_player_join, player}, socket) do
     push(socket, "presence_state", Presence.list(socket))
     {:ok, _} = Presence.track(socket, "player:#{player.id}", %{
@@ -72,6 +82,11 @@ defmodule QuackboxWeb.RoomChannel do
       id: audience.id,
       type: "audience"
     })
+    {:noreply, socket}
+  end
+
+  def handle_info({:after_start_game, response}, socket) do
+    broadcast!(socket, "category_select", response)
     {:noreply, socket}
   end
 end
