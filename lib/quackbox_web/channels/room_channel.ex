@@ -19,9 +19,8 @@ defmodule QuackboxWeb.RoomChannel do
     do: Host.join(access_code, socket)
   
   # Refuse all other attempts to join
-  def join(_room, _params, _socket) do
-    {:error, %{reason: "Invalid session."}}
-  end
+  def join(_room, _params, _socket), 
+    do: {:error, %{reason: "Invalid session."}}
 
   # Lead player starts the game
   def handle_in("start_game", _params, %{assigns: %{current_player_id: _player_id, room_id: room_id}} = socket) do
