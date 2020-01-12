@@ -17,7 +17,8 @@ defmodule QuackboxWeb.RoomChannel do
         is_lead: Presence.list(socket) |> Enum.empty?
       }
       response = %{
-        player: player_info
+        player: player_info,
+        scene: player.room.current_scene
       }
       send(self(), {:after_player_join, player_info})
       {:ok, response, assign(socket, :room_id, player.room.id)}
@@ -46,7 +47,19 @@ defmodule QuackboxWeb.RoomChannel do
   
   # Host joins the game
   def join("room:" <> access_code, _params, %{assigns: %{current_host_id: _host_id}} = socket) do
-    {:ok, %{channel: "room:#{access_code}", presences: Presence.list(socket)}, socket}
+    case Games.get_room!(access_code) do
+      [%Room{} = room] ->
+        presences = Presence.list(socket)
+        response = %{
+          scene: room.current_scene,
+          presences: presences
+        }
+        {:ok, response, assign(socket, :room_id, room.id)}
+      [] ->
+        {:error, %{reason: "Invalid room"}}
+      _ ->
+        {:error, %{reason: "Invalid room"}}
+    end
   end
   
   # Refuse all other attempts to join
