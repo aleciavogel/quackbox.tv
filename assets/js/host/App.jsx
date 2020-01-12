@@ -1,10 +1,21 @@
 import React, { Component } from "react";
+import { compose } from "redux";
 import { connect } from "react-redux";
+import { withStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
 
 import { joinRoom } from "./actions";
+import { RoomCode, AudienceCounter } from "./components/Layout"
 
 import GameStart from "./scenes/GameStart";
-import Loading from "../common/Loading.jsx";
+import Loading from "../common/Loading";
+import Switch from "../common/Switch";
+
+const styles = {
+  root: {
+    height: "100vh"
+  }
+}
 
 class App extends Component {
   componentDidMount() {
@@ -14,13 +25,26 @@ class App extends Component {
   }
 
   render() {
-    const { loading, room_id } = this.props;
+    const { loading, classes, room_id } = this.props;
 
     if (loading) {
       return <Loading />;
-    } else {
-      return <GameStart room_id={room_id} />;
-    }
+    } 
+
+    return (
+      <Grid container className={classes.root}>
+        <Switch>
+          <GameStart scene="game-start" />
+          {/* TODO: select-category */}
+          {/* TODO: answering */}
+          {/* TODO: voting */}
+          {/* TODO: leaderboard */}
+          {/* TODO: game-end */}
+        </Switch>
+        <RoomCode room_id={room_id} />
+        <AudienceCounter />
+      </Grid>
+    )
   }
 }
 
@@ -32,4 +56,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(App);
+export default compose(connect(mapStateToProps), withStyles(styles))(App);

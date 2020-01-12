@@ -6,13 +6,13 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = (env, options) => ({
   watchOptions: {
-    aggregateTimeout: 300,
+    aggregateTimeout: 100,
     poll: 1000
   },
   optimization: {
     minimize: true,
     minimizer: [
-      new TerserPlugin({ cache: true, parallel: true, sourceMap: false }),
+      new TerserPlugin({ cache: false, parallel: true, sourceMap: false }),
       new OptimizeCSSAssetsPlugin({})
     ]
   },
