@@ -20,7 +20,7 @@ defmodule QuackboxWeb.RoomChannel do
         player: player_info
       }
       send(self(), {:after_player_join, player_info})
-      {:ok, response, assign(socket, :room_id, room.id)}
+      {:ok, response, assign(socket, :room_id, player.room.id)}
     else
       {:error, %{reason: "Invalid session."}}
     end

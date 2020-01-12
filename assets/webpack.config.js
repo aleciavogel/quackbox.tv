@@ -10,6 +10,7 @@ module.exports = (env, options) => ({
     poll: 1000
   },
   optimization: {
+    minimize: true,
     minimizer: [
       new TerserPlugin({ cache: true, parallel: true, sourceMap: false }),
       new OptimizeCSSAssetsPlugin({})

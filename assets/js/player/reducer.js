@@ -1,4 +1,4 @@
-import { JOIN_ROOM, RECEIVE_ERROR } from "./actions";
+import { JOIN_ROOM, RECEIVE_ERROR, CATEGORY_SELECT } from "./actions";
 
 const initialState = {
   room: null,
@@ -28,6 +28,11 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         error: action.error,
         loading: false
+      };
+    case CATEGORY_SELECT:
+      return {
+        ...state,
+        scene: action.scene
       };
     default:
       return state;
