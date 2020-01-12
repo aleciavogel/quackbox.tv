@@ -5,9 +5,10 @@ import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 
 import { joinRoom } from "./actions";
-import { RoomCode, AudienceCounter } from "./components/Layout"
+import { RoomCode, AudienceCounter } from "./components/Layout";
 
 import GameStart from "./scenes/GameStart";
+import SelectCategory from "./scenes/SelectCategory";
 import Loading from "../common/Loading";
 import Switch from "../common/Switch";
 
@@ -15,7 +16,7 @@ const styles = {
   root: {
     height: "100vh"
   }
-}
+};
 
 class App extends Component {
   componentDidMount() {
@@ -29,13 +30,13 @@ class App extends Component {
 
     if (loading) {
       return <Loading />;
-    } 
+    }
 
     return (
       <Grid container className={classes.root}>
         <Switch>
           <GameStart scene="game-start" />
-          {/* TODO: select-category */}
+          <SelectCategory scene="select-category" />
           {/* TODO: answering */}
           {/* TODO: voting */}
           {/* TODO: leaderboard */}
@@ -44,7 +45,7 @@ class App extends Component {
         <RoomCode room_id={room_id} />
         <AudienceCounter />
       </Grid>
-    )
+    );
   }
 }
 
