@@ -1,8 +1,12 @@
 import { Presence } from 'phoenix'
 
+// Connectivity-related events
 export const JOIN_ROOM = 'JOIN_ROOM'
 export const RECEIVE_ERROR = 'RECEIVE_ERROR'
 export const UPDATE_PARTICIPANTS = 'UPDATE_PARTICIPANTS'
+
+// Game events
+export const CATEGORY_SELECT = 'CATEGORY_SELECT'
 
 export const joinRoom = (socket, room_id) => {
   return dispatch => {
@@ -21,6 +25,9 @@ export const joinRoom = (socket, room_id) => {
           channel,
           lead_player_id
         })
+
+        setupPresenceEvents(channel, dispatch, presences)
+        setupGameEvents(channel, dispatch)
       })
       .receive('error', ({ reason }) => {
         dispatch({
@@ -28,17 +35,28 @@ export const joinRoom = (socket, room_id) => {
           error: reason
         })
       })
-
-    channel.on('presence_state', response => {
-      presences = Presence.syncState(presences, response)
-      syncPresentUsers(dispatch, presences)
-    })
-  
-    channel.on('presence_diff', response => {
-      presences = Presence.syncDiff(presences, response)
-      syncPresentUsers(dispatch, presences)
-    })
   }
+}
+
+const setupPresenceEvents = (channel, dispatch, presences) => {
+  channel.on('presence_state', response => {
+    presences = Presence.syncState(presences, response)
+    syncPresentUsers(dispatch, presences)
+  })
+
+  channel.on('presence_diff', response => {
+    presences = Presence.syncDiff(presences, response)
+    syncPresentUsers(dispatch, presences)
+  })
+}
+
+const setupGameEvents = (channel, dispatch) => {
+  channel.on('category_select', ({ scene }) => {
+    dispatch({
+      type: CATEGORY_SELECT,
+      scene,
+    });
+  });
 }
 
 const sortPresentUsers = (presences) => {
