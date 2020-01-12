@@ -2,6 +2,9 @@
 export const JOIN_ROOM = "JOIN_ROOM";
 export const RECEIVE_ERROR = "RECEIVE_ERROR";
 
+// Player events
+export const START_GAME = "START_GAME";
+
 // Initialize event listeners
 export const joinRoom = (socket, room_id) => {
   return dispatch => {
@@ -25,3 +28,11 @@ export const joinRoom = (socket, room_id) => {
       });
   };
 };
+
+export const startGame = (channel) => {
+  channel.push('start_game', {})
+
+  return {
+    type: START_GAME
+  }
+}
