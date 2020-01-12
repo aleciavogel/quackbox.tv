@@ -1,39 +1,35 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import { joinRoom } from './actions'
+import { joinRoom } from "./actions";
 
-import GameStart from './scenes/GameStart'
-import Loading from '../common/Loading'
+import GameStart from "./scenes/GameStart";
+import Loading from "../common/Loading.jsx";
 
 class App extends Component {
   componentDidMount() {
-    const { dispatch, socket, room_id } = this.props
-    socket.connect()
-    dispatch(joinRoom(socket, room_id))
+    const { dispatch, socket, room_id } = this.props;
+    socket.connect();
+    dispatch(joinRoom(socket, room_id));
   }
 
   render() {
-    const { loading, room_id } = this.props
+    const { loading, room_id } = this.props;
 
     if (loading) {
-      return (
-        <Loading />
-      )
+      return <Loading />;
     } else {
-      return (
-        <GameStart room_id={room_id}/>
-      )
+      return <GameStart room_id={room_id} />;
     }
   }
 }
 
 function mapStateToProps(state) {
-  const { loading } = state
+  const { loading } = state;
 
   return {
     loading
-  }
+  };
 }
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps)(App);

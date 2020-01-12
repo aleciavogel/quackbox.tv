@@ -45,7 +45,7 @@ defmodule QuackboxWeb.RoomChannel do
   end
   
   # Host joins the game
-  def join("room:" <> access_code, _params, %{assigns: %{current_host_id: host_id}} = socket) do
+  def join("room:" <> access_code, _params, %{assigns: %{current_host_id: _host_id}} = socket) do
     {:ok, %{channel: "room:#{access_code}", presences: Presence.list(socket)}, socket}
   end
   
