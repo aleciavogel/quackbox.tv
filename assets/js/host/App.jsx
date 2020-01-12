@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { joinRoom } from './actions'
 
 import GameStart from './scenes/GameStart'
-import Loading from './scenes/Loading'
+import Loading from '../common/Loading'
 
 class App extends Component {
   componentDidMount() {
