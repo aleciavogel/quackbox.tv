@@ -5,6 +5,8 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
+import { startGame } from "../actions";
+
 const useStyles = makeStyles(theme => ({
   playerName: {
     textTransform: "capitalize"
@@ -17,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const GameStart = ({ player }) => {
+const GameStart = ({ player, dispatch, channel }) => {
   const classes = useStyles();
 
   return (
@@ -35,7 +37,7 @@ const GameStart = ({ player }) => {
           <Button
             variant="contained"
             className={classes.button}
-            onClick={() => console.log("start_game event")}
+            onClick={() => dispatch(startGame(channel))}
           >
             Everybody's In
           </Button>
@@ -50,10 +52,11 @@ const GameStart = ({ player }) => {
 };
 
 function mapStateToProps(state) {
-  const { player } = state;
+  const { player, channel } = state;
 
   return {
-    player
+    player,
+    channel
   };
 }
 
