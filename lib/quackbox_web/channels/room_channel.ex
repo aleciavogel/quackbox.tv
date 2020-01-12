@@ -4,64 +4,19 @@ defmodule QuackboxWeb.RoomChannel do
   alias Quackbox.Games
   alias Quackbox.Games.{Player, AudienceMember, Room}
   alias QuackboxWeb.Presence
+  alias QuackboxWeb.RoomChannel.{Host, Audience, Player}
 
   # Player joins the game
-  def join("room:" <> access_code, _params, %{assigns: %{current_player_id: player_id}} = socket) do
-    player = 
-      Repo.get(Player, player_id)
-      |> Repo.preload(:room)
-
-    if player.room.access_code === access_code do
-      player_info = %{
-        name: player.name,
-        id: player.id,
-        is_lead: Presence.list(socket) |> Enum.empty?
-      }
-      response = %{
-        player: player_info,
-        scene: player.room.current_scene
-      }
-      send(self(), {:after_player_join, player_info})
-      {:ok, response, assign(socket, :room_id, player.room.id)}
-    else
-      {:error, %{reason: "Invalid session."}}
-    end
-  end
+  def join("room:" <> access_code, _params, %{assigns: %{current_player_id: player_id}} = socket), 
+    do: Player.join(access_code, player_id, socket)
   
   # Audience joins the game
-  def join("room:" <> access_code, _params, %{assigns: %{current_audience_id: audience_id}} = socket) do
-    audience = 
-      Repo.get(AudienceMember, audience_id)
-      |> Repo.preload(:room)
-
-    if audience.room.access_code === access_code do
-      audience_info = %{
-        name: audience.name,
-        id: audience.id
-      }
-      send(self(), {:after_player_join, audience_info})
-      {:ok, %{channel: "room:#{access_code}"}, socket}
-    else
-      {:error, %{reason: "Invalid session."}}
-    end
-  end
+  def join("room:" <> access_code, _params, %{assigns: %{current_audience_id: audience_id}} = socket),
+    do: Audience.join(access_code, audience_id, socket)
   
   # Host joins the game
-  def join("room:" <> access_code, _params, %{assigns: %{current_host_id: _host_id}} = socket) do
-    case Games.get_room!(access_code) do
-      [%Room{} = room] ->
-        presences = Presence.list(socket)
-        response = %{
-          scene: room.current_scene,
-          presences: presences
-        }
-        {:ok, response, assign(socket, :room_id, room.id)}
-      [] ->
-        {:error, %{reason: "Invalid room"}}
-      _ ->
-        {:error, %{reason: "Invalid room"}}
-    end
-  end
+  def join("room:" <> access_code, _params, %{assigns: %{current_host_id: _host_id}} = socket), 
+    do: Host.join(access_code, socket)
   
   # Refuse all other attempts to join
   def join(_room, _params, _socket) do
