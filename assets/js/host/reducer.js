@@ -12,7 +12,6 @@ const initialState = {
   channel: null,
   error: null,
   loading: true,
-  lead_player_id: null,
   scene: "game-start"
 }
 
@@ -25,9 +24,9 @@ const reducer = (state = initialState, action = {}) => {
         channel: action.channel,
         players: action.players,
         audience_members: action.audience_members,
+        scene: action.scene,
         error: null,
-        loading: false,
-        lead_player_id: action.lead_player_id
+        loading: false
       }
     case UPDATE_PARTICIPANTS:
       return {

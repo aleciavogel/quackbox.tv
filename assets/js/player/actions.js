@@ -15,12 +15,13 @@ export const joinRoom = (socket, room_id) => {
 
     channel
       .join()
-      .receive("ok", ({ player }) => {
+      .receive("ok", ({ player, scene }) => {
         dispatch({
           type: JOIN_ROOM,
           room: room_id,
           channel,
-          player
+          player,
+          scene
         });
         setupGameEvents(channel, dispatch);
       })

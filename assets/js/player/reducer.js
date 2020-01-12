@@ -20,6 +20,7 @@ const reducer = (state = initialState, action = {}) => {
         room: action.room,
         channel: action.channel,
         player: action.player,
+        scene: action.scene,
         error: null,
         loading: false
       };
