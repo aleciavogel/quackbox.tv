@@ -41,14 +41,12 @@ defmodule QuackboxWeb.RoomChannel.Player do
   end
 
   # Player starts the game
-  def start_game(_params, %{assigns: %{current_player_id: _player_id, room_id: room_id}} = socket) do
-    Room
-    |> Repo.get(room_id)
-    |> Room.changeset(%{current_scene: "select-category"})
-    |> Repo.update
+  def start_game(_params, %{assigns: %{current_player_id: _player_id}} = socket) do
+    chooser = set_chooser(socket)
 
     response = %{
-      scene: "select-category"
+      scene: "select-category",
+      chooser: chooser
     }
 
     send(self(), {:after_start_game, response})
@@ -59,5 +57,31 @@ defmodule QuackboxWeb.RoomChannel.Player do
   def after_start_game(response, socket) do
     broadcast!(socket, "category_select", response)
     {:noreply, socket}
+  end
+
+  # Select a random player to be the designated "chooser" 
+  defp set_chooser(%{assigns: %{room_id: room_id}} = socket) do
+    chooser = 
+      Presence.list(socket)
+      |> pick_random_online_player
+
+    Room
+    |> Repo.get(room_id)
+    |> Room.changeset(%{current_scene: "category-select", chooser_id: chooser.id})
+    |> Repo.update
+
+    chooser
+  end
+
+  # Returns a random presence
+  defp pick_random_online_player(presences) do
+    {_, %{metas: [player]}} = Enum.random(presences)
+    random_player?(presences, player)
+  end
+
+  # Validate that the randomly selected presence is a player
+  defp random_player?(_presences, %{type: "player"} = player), do: player
+  defp random_player?(presences, %{type: "audience"}) do
+    pick_random_online_player(presences)
   end
 end
