@@ -35,7 +35,7 @@ const SelectCategory = ({ chooser, categories }) => {
         alignItems="flex-start"
         className={classes.categoryList}
       >
-        <Grid item xs={4}>
+        <Grid item xs={8} sm={6} md={5} lg={4}>
           {category_list}
         </Grid>
       </Grid>

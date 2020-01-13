@@ -130,7 +130,7 @@ if !questions_exist do
       "prompt" => "_____ is the mischievious, black Scotty dog who was curious about the ducks",
       "truth" => "Angus",
       "lie" => "Jock",
-      "category_name" => "fictional creatures"
+      "category_name" => "fiction"
     },
     %{
       "prompt" => "Groucho's duck gave you $100 if you could _____",

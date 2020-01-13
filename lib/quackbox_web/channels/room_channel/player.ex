@@ -73,7 +73,7 @@ defmodule QuackboxWeb.RoomChannel.Player do
 
     Room
     |> Repo.get(room_id)
-    |> Room.changeset(%{current_scene: "category-select", chooser_id: chooser.id})
+    |> Room.changeset(%{current_scene: "select-category", chooser_id: chooser.id})
     |> Repo.update
 
     chooser
